@@ -33,7 +33,6 @@ const float RAD_TO_DEG = 57.2958;
 const float DEG_TO_RAD = 0.0174533;
 
 // Quarternion
-static float q[4] = {1.0, 0.0, 0.0, 0.0};
 
 // UDP Variable
 // #define WIFI_SSID "ruter"
@@ -46,6 +45,7 @@ static float q[4] = {1.0, 0.0, 0.0, 0.0};
 #define PIN_SDA 21
 #define PIN_CLK 22
 #define I2C_ADDRESS 0x1e
+#define I2C_ADDRESS_1 0x1c
 
 #include "HMC5883L.h"
 
@@ -54,87 +54,87 @@ static float q[4] = {1.0, 0.0, 0.0, 0.0};
 
 
 
-// I2C functions implementation
- esp_err_t hmc5883l_write_byte(uint8_t reg_addr, uint8_t data) {
-    uint8_t write_buf[2] = {reg_addr, data};
-    return i2c_master_write_to_device(I2C_NUM_0, HMC5883L_DEFAULT_ADDRESS, write_buf, sizeof(write_buf), pdMS_TO_TICKS(100));
-}
+// // I2C functions implementation
+//  esp_err_t hmc5883l_write_byte(uint8_t reg_addr, uint8_t data) {
+//     uint8_t write_buf[2] = {reg_addr, data};
+//     return i2c_master_write_to_device(I2C_NUM_0, HMC5883L_DEFAULT_ADDRESS, write_buf, sizeof(write_buf), pdMS_TO_TICKS(100));
+// }
 
-static esp_err_t hmc5883l_read_bytes(uint8_t reg_addr, uint8_t *data, size_t len) {
-    return i2c_master_write_read_device(I2C_NUM_0, HMC5883L_DEFAULT_ADDRESS, &reg_addr, 1, data, len, pdMS_TO_TICKS(100));
-}
+// static esp_err_t hmc5883l_read_bytes(uint8_t reg_addr, uint8_t *data, size_t len) {
+//     return i2c_master_write_read_device(I2C_NUM_0, HMC5883L_DEFAULT_ADDRESS, &reg_addr, 1, data, len, pdMS_TO_TICKS(100));
+// }
 
-bool hmc5883l_initialize(void) {
-    // Configure sensor
-    // The number of samples averaged per measured output is 8
-    // Data Output Rate is 15Hz
-    // Normal measurement configuration
-    hmc5883l_write_byte(HMC5883L_RA_CONFIG_A, 0x70);
+// bool hmc5883l_initialize(void) {
+//     // Configure sensor
+//     // The number of samples averaged per measured output is 8
+//     // Data Output Rate is 15Hz
+//     // Normal measurement configuration
+//     hmc5883l_write_byte(HMC5883L_RA_CONFIG_A, 0x70);
     
-    // -1.3Ga-->+1.3Ga 1090 counts / Gauss
-    hmc5883l_write_byte(HMC5883L_RA_CONFIG_B, 0x20);
-    // hmc5883l_write_byte(HMC5883L_RA_CONFIG_B , HMC5883L_GAIN_820);
-    // Single-Measurement Mode
-    hmc5883l_write_byte(HMC5883L_RA_MODE, HMC5883L_MODE_CONTINUOUS);
+//     // -1.3Ga-->+1.3Ga 1090 counts / Gauss
+//     hmc5883l_write_byte(HMC5883L_RA_CONFIG_B, 0x20);
+//     // hmc5883l_write_byte(HMC5883L_RA_CONFIG_B , HMC5883L_GAIN_820);
+//     // Single-Measurement Mode
+//     hmc5883l_write_byte(HMC5883L_RA_MODE, HMC5883L_MODE_CONTINUOUS);
     
-    return true;
-}
+//     return true;
+// }
 
- bool hmc5883l_test_connection(void) {
-    uint8_t data;
-    esp_err_t ret = hmc5883l_read_bytes(HMC5883L_RA_ID_A, &data, 1);
-    return (ret == ESP_OK && data == 0x48);
-}
+//  bool hmc5883l_test_connection(void) {
+//     uint8_t data;
+//     esp_err_t ret = hmc5883l_read_bytes(HMC5883L_RA_ID_A, &data, 1);
+//     return (ret == ESP_OK && data == 0x48);
+// }
 
- bool hmc5883l_get_ready_status(void) {
-    uint8_t status;
-    hmc5883l_read_bytes(HMC5883L_RA_STATUS, &status, 1);
-    return (status & 0x01) != 0;
-}
+//  bool hmc5883l_get_ready_status(void) {
+//     uint8_t status;
+//     hmc5883l_read_bytes(HMC5883L_RA_STATUS, &status, 1);
+//     return (status & 0x01) != 0;
+// }
 
-void hmc5883l_get_heading(int16_t *mx, int16_t *my, int16_t *mz) {
-    uint8_t raw_data[6];
-    hmc5883l_read_bytes(HMC5883L_RA_DATAX_H, raw_data, 6);
-    printf("RAW:%u\n", (unsigned int)raw_data);
-    *mx = (int16_t)((raw_data[0] << 8) | raw_data[1]);
-    *my = (int16_t)((raw_data[2] << 8) | raw_data[3]);
-    *mz = (int16_t)((raw_data[4] << 8) | raw_data[5]);
-}
+// void hmc5883l_get_heading(int16_t *mx, int16_t *my, int16_t *mz) {
+//     uint8_t raw_data[6];
+//     hmc5883l_read_bytes(HMC5883L_RA_DATAX_H, raw_data, 6);
+//     printf("RAW:%u\n", (unsigned int)raw_data);
+//     *mx = (int16_t)((raw_data[0] << 8) | raw_data[1]);
+//     *my = (int16_t)((raw_data[2] << 8) | raw_data[3]);
+//     *mz = (int16_t)((raw_data[4] << 8) | raw_data[5]);
+// }
 
-void hmc5883l_task(void *pvParameters) {
-    // Initialize HMC5883L
-    static const char *TAG = "HMC5883L";
+// void hmc5883l_task(void *pvParameters) {
+//     // Initialize HMC5883L
+//     static const char *TAG = "HMC5883L";
 
-    if (!hmc5883l_initialize()) {
-        ESP_LOGE(TAG, "Failed to initialize HMC5883L");
-        vTaskDelete(NULL);
-    }
+//     if (!hmc5883l_initialize()) {
+//         ESP_LOGE(TAG, "Failed to initialize HMC5883L");
+//         vTaskDelete(NULL);
+//     }
 
-    // Verify the I2C connection
-    if (!hmc5883l_test_connection()) {
-        ESP_LOGE(TAG, "HMC5883L not found");
-        vTaskDelete(NULL);
-    }
+//     // Verify the I2C connection
+//     if (!hmc5883l_test_connection()) {
+//         ESP_LOGE(TAG, "HMC5883L not found");
+//         vTaskDelete(NULL);
+//     }
 
     
-    while(1) {
-        // Read raw data from mag
-        if (hmc5883l_get_ready_status()) {
-            int16_t mx, my, mz;
-            hmc5883l_get_heading(&mx, &my, &mz);
-            // ESP_LOGI(TAG, "mag=%d %d %d", mx, my, mz);
-            printf("x:%d y:%d z:%d\n", mx, my, mz);
-            // mx = mx + CONFIG_MAGX;
-            // my = my + CONFIG_MAGY;
-            // mz = mz + CONFIG_MAGZ
-        }
+//     while(1) {
+//         // Read raw data from mag
+//         if (hmc5883l_get_ready_status()) {
+//             int16_t mx, my, mz;
+//             hmc5883l_get_heading(&mx, &my, &mz);
+//             // ESP_LOGI(TAG, "mag=%d %d %d", mx, my, mz);
+//             printf("x:%d y:%d z:%d\n", mx, my, mz);
+//             // mx = mx + CONFIG_MAGX;
+//             // my = my + CONFIG_MAGY;
+//             // mz = mz + CONFIG_MAGZ
+//         }
 
-        vTaskDelay(10);
-    }
+//         vTaskDelay(10);
+//     }
 
-    // Never reach here
-    vTaskDelete(NULL);
-}
+//     // Never reach here
+//     vTaskDelete(NULL);
+// }
 
 static const char *TAG = "static_ip";
 
@@ -389,8 +389,7 @@ int get_throttle()
     pot_pwm = mapValue(sum_1, 0, 200, 1000, 1900);
     return pot_pwm;
 }
-
-void Mahony_Update(float ax, float ay, float az, float gx, float gy, float gz, float delta_t)
+void Mahony_Update(float ax, float ay, float az, float gx, float gy, float gz, float delta_t, float* q)
 {
     // PID Variable
     const float Kp = 30.0;
@@ -429,14 +428,15 @@ void Mahony_Update(float ax, float ay, float az, float gx, float gy, float gz, f
         ez = (ax * vy - ay * vx);
 
         // Compute and apply to gyro term the integral feedback, if enabled
+        static float ix_static = 0.0, iy_static = 0.0, iz_static = 0.0;
         if (Ki > 0.0f)
         {
-            ix += Ki * ex * delta_t; // integral error scaled by Ki
-            iy += Ki * ey * delta_t;
-            iz += Ki * ez * delta_t;
-            gx += ix; // apply integral feedback
-            gy += iy;
-            gz += iz;
+            ix_static += Ki * ex * delta_t; // integral error scaled by Ki
+            iy_static += Ki * ey * delta_t;
+            iz_static += Ki * ez * delta_t;
+            gx += ix_static; // apply integral feedback
+            gy += iy_static;
+            gz += iz_static;
         }
 
         // Apply proportional feedback to gyro term
@@ -465,9 +465,10 @@ void Mahony_Update(float ax, float ay, float az, float gx, float gy, float gz, f
     // Normalise quaternion
     recipNorm = 1.0 / sqrt(q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3]);
 
-    q[0] = q[0] * recipNorm;
-    q[1] = q[1] * recipNorm;
-    q[2] = q[2] * recipNorm;
+    q[0] *= recipNorm;
+    q[1] *= recipNorm;
+    q[2] *= recipNorm;
+    q[3] *= recipNorm;
 }
 
 void sensor_read(struct imu_data *gyro, struct imu_data *acel, mpu6050_handle_t mpu6050)
@@ -503,8 +504,9 @@ void sensor_read(struct imu_data *gyro, struct imu_data *acel, mpu6050_handle_t 
     acel->z = acce_data.raw_acce_z;
 }
 
-void start_process(void *pvParameters)
-{
+void right_sensor(void *pvParameters)
+{   
+    static float q1[4] = {1.0, 0.0, 0.0, 0.0};
     /*Imu Data Raw*/
     struct imu_data gyro_raw;
     struct imu_data acel_raw;
@@ -515,9 +517,9 @@ void start_process(void *pvParameters)
     struct imu_data gyro_offset;
 
     /*Roll Pitch Yaw variable*/
-    float roll, pitch, yaw, yaw_1;
-    uint16_t roll_pwm, pitch_pwm, yaw_pwm;
-
+    float roll, pitch;
+    uint16_t roll_pwm, pitch_pwm, yaw_pwm, mode1;
+    uint16_t mode_1, mode_2, mode_pwm, arming, arming_pwm, magnet, magnet_pwm, poshold;
     /*Timing Variable*/
     float now = 0, last = 0, delta_t = 0;
 
@@ -526,12 +528,12 @@ void start_process(void *pvParameters)
     float A_offset[6] = {265.0, -80.0, -700.0, 0.994, 1.000, 1.014};
 
     /* GPIO and ADC Variable*/
-    uint16_t mode_1, mode_2, mode_pwm, arming, arming_pwm, throttle_pwm, magnet, magnet_pwm, poshold;
+    uint16_t throttle_pwm;
 
     // Initialize MPU6050
-    mpu6050_handle_t mpu6050 = mpu6050_create(I2C_NUM_0, MPU6050_I2C_ADDRESS);
+    mpu6050_handle_t mpu6050 = mpu6050_create(I2C_NUM_0, MPU6050_I2C_ADDRESS_1);
     mpu6050_init(mpu6050);
-
+   
     /* Payload Variable */
     // char *payload = (char *)pvParameters;
 
@@ -569,16 +571,17 @@ void start_process(void *pvParameters)
         last = now;
         // printf("%f, ", delta_t);
         /*Call Mahony Update*/
-        Mahony_Update(acel_scaled.x, acel_scaled.y, acel_scaled.z, gyro_scaled.x, gyro_scaled.y, gyro_scaled.z, delta_t);
+        Mahony_Update(acel_scaled.x, acel_scaled.y, acel_scaled.z, gyro_scaled.x, gyro_scaled.y, gyro_scaled.z, delta_t, q1);
 
         /*Get Roll Pitch Yaw Angle*/
-        roll = atan2((q[0] * q[1] + q[2] * q[3]), 0.5 - (q[1] * q[1] + q[2] * q[2]));
-        pitch = asin(2.0 * (q[0] * q[2] - q[1] * q[3]));
+        
+        roll = atan2((q1[0] * q1[1] + q1[2] * q1[3]), 0.5 - (q1[1] * q1[1] + q1[2] * q1[2]));
+        pitch = asin(2.0 * (q1[0] * q1[2] - q1[1] * q1[3]));
         // conventional yaw increases clockwise from North. Note that the MPU-6050 does not know where True North is.
-        yaw = -atan2((q[1] * q[2] + q[0] * q[3]), 0.5 - (q[2] * q[2] + q[3] * q[3]));
+        // yaw = -atan2((q[1] * q[2] + q[0] * q[3]), 0.5 - (q[2] * q[2] + q[3] * q[3])); //gak kanggo
 
         // Convert to degrees
-        yaw *= RAD_TO_DEG;
+        // yaw *= RAD_TO_DEG;
         pitch *= RAD_TO_DEG;
         roll *= RAD_TO_DEG;
 
@@ -613,51 +616,52 @@ void start_process(void *pvParameters)
         //     yaw += 360.0; // compass circle
         // // correct for local magnetic declination here
 
-        yaw_1 = yaw;
-        // Ensure yaw angle is within the range -180 to 180 degrees
-        if (yaw > 180.0)
-        {
-            yaw -= 360.0;
-        }
-        else if (yaw < -180.0)
-        {
-            yaw += 360.0;
-        }
+        // yaw_1 = yaw;
+        // // Ensure yaw angle is within the range -180 to 180 degrees
+        // if (yaw > 180.0)
+        // {
+        //     yaw -= 360.0;
+        // }
+        // else if (yaw < -180.0)
+        // {
+        //     yaw += 360.0;
+        // }
 
-        // Ensure yaw angle is within the range -90 to 90 degrees
-        if (yaw > 90.0)
-        {
-            yaw -= 180.0;
-        }
-        else if (yaw < -90.0)
-        {
-            yaw += 180.0;
-        }
+        // // Ensure yaw angle is within the range -90 to 90 degrees
+        // if (yaw > 90.0)
+        // {
+        //     yaw -= 180.0;
+        // }
+        // else if (yaw < -90.0)
+        // {
+        //     yaw += 180.0;
+        // }
 
-        // Limit PWM Value
-        if (yaw_1 < -90)
-        {
-            yaw_pwm = 1000;
-        }
-        else if (yaw_1 > 90)
-        {
-            yaw_pwm = 2000;
-        }
-        else
-        {
-            yaw_pwm = ((yaw + 90) / 180) * (2000 - 1000) + 1000;
-        }
+        // // Limit PWM Value
+        // if (yaw_1 < -90)
+        // {
+        //     yaw_pwm = 1000;
+        // }
+        // else if (yaw_1 > 90)
+        // {
+        //     yaw_pwm = 2000;
+        // }
+        // else
+        // {
+        //     yaw_pwm = ((yaw + 90) / 180) * (2000 - 1000) + 1000;
+        // }
 
-        // Deadzone
-        if (yaw_pwm > 1450 && yaw_pwm < 1550){
-            yaw_pwm = 1500;
-        }else if (yaw_pwm > 1450){
-            yaw_pwm += 50;
-        }else if (yaw_pwm < 1550){
-            yaw_pwm -= 50;
-        }
-
+        // // Deadzone
+        // if (yaw_pwm > 1450 && yaw_pwm < 1550){
+        //     yaw_pwm = 1500;
+        // }else if (yaw_pwm > 1450){
+        //     yaw_pwm += 50;
+        // }else if (yaw_pwm < 1550){
+        //     yaw_pwm -= 50;
+        // }
+////Genek yaw, dipindah ngisor
         /*Switch Mode*/
+
         mode_1 = gpio_get_level(GPIO_NUM_5);
         mode_2 = gpio_get_level(GPIO_NUM_19);
         if (mode_1 == 1 && mode_2 == 0)
@@ -705,7 +709,153 @@ void start_process(void *pvParameters)
             yaw_pwm = 1500;
         }
         
-        sprintf(payload, "r%dp%dy%dm%d\n", roll_pwm, pitch_pwm, yaw_pwm, mode_pwm);
+        sprintf(payload, "Right:r%dp%dy%dm%d\n", roll_pwm, pitch_pwm, yaw_pwm, mode_pwm);
+        // printf("%d\n", yaw_pwm);
+        vTaskDelay(10 / portTICK_PERIOD_MS);
+    }
+}
+
+void left_sensor(void *pvParameters)
+{
+    static float q2[4] = {1.0, 0.0, 0.0, 0.0};
+
+    /*Imu Data Raw*/
+    struct imu_data gyro_raw;
+    struct imu_data acel_raw;
+
+    /*Imu data processed*/
+    struct imu_data gyro_scaled;
+    struct imu_data acel_scaled;
+    struct imu_data gyro_offset;
+
+    /*Roll Pitch Yaw variable*/
+    float yaw, yaw_1, throttle;
+    uint16_t yaw_pwm, throttle_pwm;
+
+    /*Timing Variable*/
+    float now = 0, last = 0, delta_t = 0;
+
+    /*Constant Variable*/
+    float const gyro_constant = 250.0 / 32768.0;
+    float A_offset[6] = {265.0, -80.0, -700.0, 0.994, 1.000, 1.014};
+
+    /* GPIO and ADC Variable*/
+    // uint16_t mode_1, mode_2, mode_pwm, arming, arming_pwm, throttle_pwm, magnet, magnet_pwm, poshold;
+
+    // Initialize MPU6050
+    mpu6050_handle_t mpu6050 = mpu6050_create(I2C_NUM_0, MPU6050_I2C_ADDRESS);
+    mpu6050_init(mpu6050);
+   
+    /* Payload Variable */
+    // char *payload = (char *)pvParameters;
+
+    /*Calibrate Gyro*/
+    for (int i = 0; i < 2000; i++)
+    {
+        /* code */
+        sensor_read(&gyro_raw, &acel_raw, mpu6050);
+        gyro_offset.x += gyro_raw.x;
+        gyro_offset.y += gyro_raw.y;
+        gyro_offset.z += gyro_raw.z;
+    }
+    gyro_offset.x /= 2000;
+    gyro_offset.y /= 2000;
+    gyro_offset.z /= 2000;
+    printf("Gyro Calibration done !!\n");
+
+    while (true)
+    {
+        /* code */
+        sensor_read(&gyro_raw, &acel_raw, mpu6050);
+
+        /*Apply Offset & Scale Constant*/
+        gyro_scaled.x = (gyro_raw.x - gyro_offset.x) * DEG_TO_RAD * gyro_constant;
+        gyro_scaled.y = (gyro_raw.y - gyro_offset.y) * DEG_TO_RAD * gyro_constant;
+        gyro_scaled.z = (gyro_raw.z - gyro_offset.z) * DEG_TO_RAD * gyro_constant;
+
+        acel_scaled.x = (acel_raw.x - A_offset[0]) * A_offset[3];
+        acel_scaled.y = (acel_raw.y - A_offset[1]) * A_offset[4];
+        acel_scaled.z = (acel_raw.z - A_offset[2]) * A_offset[5];
+
+        /*Get ESP Timing*/
+        now = esp_timer_get_time();
+        delta_t = (now - last) * 0.000001;
+        last = now;
+        // printf("%f, ", delta_t);
+        /*Call Mahony Update*/
+        Mahony_Update(acel_scaled.x, acel_scaled.y, acel_scaled.z, gyro_scaled.x, gyro_scaled.y, gyro_scaled.z, delta_t, q2);
+
+        /*Get Roll Pitch Yaw Angle*/
+        yaw = atan2((q2[0] * q2[1] + q2[2] * q2[3]), 0.5 - (q2[1] * q2[1] + q2[2] * q2[2])); //asline roll
+        throttle = asin(2.0 * (q2[0] * q2[2] - q2[1] * q2[3])); //asline pitch
+        // conventional yaw increases clockwise from North. Note that the MPU-6050 does not know where True North is.
+        // yaw = -atan2((q[1] * q[2] + q[0] * q[3]), 0.5 - (q[2] * q[2] + q[3] * q[3]));
+
+        // Convert to degrees
+        yaw *= RAD_TO_DEG;
+        throttle *= RAD_TO_DEG;
+        // roll *= RAD_TO_DEG;
+
+        /*Mapping degree to PWM*/
+        // roll_pwm = mapValue(roll, -45, 45, 1000, 2000);
+        // pitch_pwm = mapValue(pitch, -45, 45, 2000, 1000);
+        yaw_pwm = mapValue(yaw, -45, 45, 1000, 2000);
+        throttle_pwm = mapValue(throttle, -45, 45, 1000, 2000);
+        // throttle_pwm = get_throttle();
+       // yaw_pwm = 1500;
+
+        /* 0 to 360 degrees with Relative North Position */
+        // if (yaw < 0)
+        //     yaw += 360.0; // compass circle
+        // // correct for local magnetic declination here
+
+
+/////dijajal disek
+        // yaw_1 = yaw;
+        // // Ensure yaw angle is within the range -180 to 180 degrees
+        // if (yaw > 180.0)
+        // {
+        //     yaw -= 360.0;
+        // }
+        // else if (yaw < -180.0)
+        // {
+        //     yaw += 360.0;
+        // }
+
+        // // Ensure yaw angle is within the range -90 to 90 degrees
+        // if (yaw > 90.0)
+        // {
+        //     yaw -= 180.0;
+        // }
+        // else if (yaw < -90.0)
+        // {
+        //     yaw += 180.0;
+        // }
+
+        // // Limit PWM Value
+        // if (yaw_1 < -90)
+        // {
+        //     yaw_pwm = 1000;
+        // }
+        // else if (yaw_1 > 90)
+        // {
+        //     yaw_pwm = 2000;
+        // }
+        // else
+        // {
+        //     yaw_pwm = ((yaw + 90) / 180) * (2000 - 1000) + 1000;
+        // }
+
+        // // Deadzone
+        // if (yaw_pwm > 1450 && yaw_pwm < 1550){
+        //     yaw_pwm = 1500;
+        // }else if (yaw_pwm > 1450){
+        //     yaw_pwm += 50;
+        // }else if (yaw_pwm < 1550){
+        //     yaw_pwm -= 50;
+        // }
+
+        sprintf(payload, "Left:y%d t%d\n", yaw_pwm, throttle_pwm);
         // printf("%d\n", yaw_pwm);
         vTaskDelay(10 / portTICK_PERIOD_MS);
     }
@@ -716,13 +866,15 @@ void start_process(void *pvParameters)
 void app_main(void)
 {
     i2c_init();
-    hmc5883l_initialize();
+    // hmc5883l_initialize();
     // adc_init();
     // switch_init();
     // wifi_connection();
 
     vTaskDelay(500 / portTICK_PERIOD_MS);
-    // xTaskCreate(start_process, "start_process", 4096, NULL, 5, NULL);
-    xTaskCreate(hmc5883l_task, "hmc5883l_task", 1024*8, NULL, 5, NULL);
+    xTaskCreate(left_sensor, "left_sensor", 4096, NULL, 5, NULL);
+    xTaskCreate(right_sensor, "right_sensor", 4096, NULL, 5, NULL);
+    
+    // xTaskCreate(hmc5883l_task, "hmc5883l_task", 1024*8, NULL, 5, NULL);
     // xTaskCreate(udp_client_task, "udp_cilent_task", 4096, NULL, 4, NULL);
 }

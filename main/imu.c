@@ -133,7 +133,7 @@ void Mahony_Update(float q[4], struct imu_data gyro, struct imu_data acce, float
 }
 
 
-void imu_read_raw(mpu6050_handle_t mpu6050, struct imu_data *gyro, struct imu_data *acce) {
+esp_err_t imu_read_raw(mpu6050_handle_t mpu6050, struct imu_data *gyro, struct imu_data *acce) {
     /* MPU6050 variable*/
     esp_err_t err;
     mpu6050_raw_gyro_value_t gyro_data;
@@ -144,6 +144,7 @@ void imu_read_raw(mpu6050_handle_t mpu6050, struct imu_data *gyro, struct imu_da
     if (err != ESP_OK) {
         /* code */
         printf("Failed to get gyro data\n");
+        return err;
     }
 
     /* Read Acce Data */
@@ -151,6 +152,7 @@ void imu_read_raw(mpu6050_handle_t mpu6050, struct imu_data *gyro, struct imu_da
     if (err != ESP_OK) {
         /* code */
         printf("Failed to get acce data\n");
+        return err;
     }
 
     /*Store Variable*/
@@ -161,6 +163,8 @@ void imu_read_raw(mpu6050_handle_t mpu6050, struct imu_data *gyro, struct imu_da
     acce->x = acce_data.raw_acce_x;
     acce->y = acce_data.raw_acce_y;
     acce->z = acce_data.raw_acce_z;
+
+    return err;
 }
 
 mpu6050_handle_t imu_init(i2c_port_t port, const uint16_t dev_addr) {
@@ -174,7 +178,11 @@ mpu6050_handle_t imu_init(i2c_port_t port, const uint16_t dev_addr) {
 }
 
 void imu_read(mpu6050_handle_t mpu6050, struct full_imu_data *data) {
-    imu_read_raw(mpu6050, &data->gyro, &data->acce);
+    esp_err_t err = imu_read_raw(mpu6050, &data->gyro, &data->acce);
+    if (err != ESP_OK) {
+        printf("Failed to read IMU data\n");
+        return;
+    }
 
     /*Apply Offset & Scale Constant*/
     // Gyro

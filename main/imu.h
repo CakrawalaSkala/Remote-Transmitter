@@ -28,5 +28,5 @@ struct imu_data imu_multiply_return(struct imu_data a, struct imu_data b);
 void imu_divide_single(struct imu_data *a, float b);
 
 mpu6050_handle_t imu_init(i2c_port_t port, const uint16_t dev_addr);
-void imu_read_raw(mpu6050_handle_t mpu6050, struct imu_data *gyro, struct imu_data *acce);
+esp_err_t imu_read_raw(mpu6050_handle_t mpu6050, struct imu_data *gyro, struct imu_data *acce);
 void imu_read(mpu6050_handle_t mpu6050, struct full_imu_data *data);

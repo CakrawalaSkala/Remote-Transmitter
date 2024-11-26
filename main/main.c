@@ -216,55 +216,50 @@ float mapValue(float value, float inputMin, float inputMax, float outputMin, flo
     return ((value - inputMin) * outputRange / inputRange) + outputMin;
 }
 
-int get_throttle() {
-    uint16_t pot_value, pot_pwm;
-    uint16_t sum_1 = 0;
-
-    // Multisampling
-    for (uint8_t i = 0; i < 64; i++) {
-        /* code */
-        pot_value = adc1_get_raw(ADC1_CHANNEL_5);
-        sum_1 += pot_value;
-    }
-    sum_1 /= 64;
-
-    pot_pwm = mapValue(sum_1, 0, 200, 1000, 1900);
-    return pot_pwm;
-}
-
 void start_process() {
-    struct full_imu_data imu_data;
-    imu_data.q[0] = 1.0;
+    // IMU data
+    struct full_imu_data left_imu_data;
+    left_imu_data.q[0] = 1.0;
+
+    struct full_imu_data right_imu_data;
+    right_imu_data.q[0] = 1.0;
 
     /*Roll Pitch Yaw variable*/
-    float roll, pitch, yaw, yaw_1;
+    float roll, pitch, throttle, yaw, yaw_1;
     uint16_t roll_pwm, pitch_pwm, yaw_pwm;
 
     /* GPIO and ADC Variable*/
     uint16_t mode_1, mode_2, mode_pwm, arming, arming_pwm, throttle_pwm, magnet, magnet_pwm, poshold;
 
     // Initialize MPU6050
-    mpu6050_handle_t imu = imu_init(I2C_NUM_0, MPU6050_I2C_ADDRESS);
+    mpu6050_handle_t left_imu = imu_init(I2C_NUM_0, MPU6050_I2C_ADDRESS_1);
+    mpu6050_handle_t right_imu = imu_init(I2C_NUM_0, MPU6050_I2C_ADDRESS);
 
     /* Payload Variable */
     // char *payload = (char *)pvParameters;
 
     /*Calibrate Gyro*/
     for (int i = 0; i < 2000; i++) {
-        imu_read_raw(imu, &imu_data.gyro, &imu_data.acce);
+        imu_read_raw(left_imu, &left_imu_data.gyro, &left_imu_data.acce);
+        imu_read_raw(right_imu, &right_imu_data.gyro, &right_imu_data.acce);
 
-        imu_add(&imu_data.offset, imu_data.gyro);
+        imu_add(&left_imu_data.offset, left_imu_data.gyro);
+        imu_add(&right_imu_data.offset, right_imu_data.gyro);
     }
-    imu_divide_single(&imu_data.offset, 2000);
+    imu_divide_single(&left_imu_data.offset, 2000);
+    imu_divide_single(&right_imu_data.offset, 2000);
     printf("Gyro Calibration done !!\n");
 
     while (true) {
-        imu_read(imu, &imu_data);
+        imu_read(left_imu, &left_imu_data);
+        imu_read(right_imu, &right_imu_data);
 
-        /*Get Roll Pitch Yaw Angle*/
-        roll = imu_data.processed.y;
-        pitch = imu_data.processed.x;
-        yaw = imu_data.processed.z;
+        /*Get Roll Pitch Throttle Yaw*/
+        roll = right_imu_data.processed.y;
+        pitch = right_imu_data.processed.x;
+
+        throttle = left_imu_data.processed.x;
+        yaw = left_imu_data.processed.y;
 
         /*Limit Roll  Angle*/
         if (roll < -70) {
@@ -283,7 +278,7 @@ void start_process() {
         /*Mapping degree to PWM*/
         roll_pwm = mapValue(roll, -45, 45, 1000, 2000);
         pitch_pwm = mapValue(pitch, -45, 45, 2000, 1000);
-        throttle_pwm = get_throttle();
+        throttle_pwm = mapValue(throttle, -45, 45, 1000, 2000);
        // yaw_pwm = 1500;
 
         /* 0 to 360 degrees with Relative North Position */
@@ -357,12 +352,12 @@ void start_process() {
         /*Switch Force Poshold*/
         poshold = gpio_get_level(GPIO_NUM_15);
         if (poshold == 1) {
-            yaw_pwm = 1500;
+            // yaw_pwm = 1500;
         }
 
         // sprintf(payload, "r%dp%dy%dm%d\n", roll_pwm, pitch_pwm, yaw_pwm, mode_pwm);
         // sprintf(payload, "r%dp%dt%dy%dm%da%dg%d", roll_pwm, pitch_pwm, throttle_pwm, yaw_pwm, mode_pwm, arming_pwm, magnet_pwm);
-        printf("r%dp%dy%d\n", roll_pwm, pitch_pwm, yaw_pwm);
+        printf("r%dp%dt%dy%d\n", roll_pwm, pitch_pwm, throttle_pwm, yaw_pwm);
         // printf("%d\n", yaw_pwm);
 
         vTaskDelay(10 / portTICK_PERIOD_MS);

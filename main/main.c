@@ -3,6 +3,10 @@
 #include <math.h>
 #include <stdbool.h>
 
+
+#define DELAYLEFT 25
+#define DELAYRIGHT 25
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/event_groups.h"
@@ -138,7 +142,7 @@ const float DEG_TO_RAD = 0.0174533;
 
 static const char *TAG = "static_ip";
 
-char payload[128] = "payload";
+char payload[128], payload_2[128] = "";
 
 struct imu_data
 {
@@ -471,7 +475,7 @@ void Mahony_Update(float ax, float ay, float az, float gx, float gy, float gz, f
     q[3] *= recipNorm;
 }
 
-void sensor_read(struct imu_data *gyro, struct imu_data *acel, mpu6050_handle_t mpu6050)
+esp_err_t sensor_read(struct imu_data *gyro, struct imu_data *acel, mpu6050_handle_t mpu6050, char e)
 {
     /* MPU6050 variable*/
     esp_err_t err_gyro, err_acce;
@@ -483,7 +487,8 @@ void sensor_read(struct imu_data *gyro, struct imu_data *acel, mpu6050_handle_t 
     if (err_gyro != ESP_OK)
     {
         /* code */
-        printf("Failed to get gyro data\n");
+        printf("Failed to get gyro data %c \n", e);
+        return err_gyro;
     }
 
     /* Read Acce Data */
@@ -491,7 +496,8 @@ void sensor_read(struct imu_data *gyro, struct imu_data *acel, mpu6050_handle_t 
     if (err_acce != ESP_OK)
     {
         /* code */
-        printf("Failed to get acce data\n");
+        printf("Failed to get acce data %c \n", e);
+        return err_acce;
     }
 
     /*Store Variable*/
@@ -502,6 +508,7 @@ void sensor_read(struct imu_data *gyro, struct imu_data *acel, mpu6050_handle_t 
     acel->x = acce_data.raw_acce_x;
     acel->y = acce_data.raw_acce_y;
     acel->z = acce_data.raw_acce_z;
+    return ESP_OK;
 }
 
 void right_sensor(void *pvParameters)
@@ -541,7 +548,7 @@ void right_sensor(void *pvParameters)
     for (int i = 0; i < 2000; i++)
     {
         /* code */
-        sensor_read(&gyro_raw, &acel_raw, mpu6050);
+        sensor_read(&gyro_raw, &acel_raw, mpu6050, 'r');
         gyro_offset.x += gyro_raw.x;
         gyro_offset.y += gyro_raw.y;
         gyro_offset.z += gyro_raw.z;
@@ -554,7 +561,7 @@ void right_sensor(void *pvParameters)
     while (true)
     {
         /* code */
-        sensor_read(&gyro_raw, &acel_raw, mpu6050);
+        sensor_read(&gyro_raw, &acel_raw, mpu6050, 'r');
 
         /*Apply Offset & Scale Constant*/
         gyro_scaled.x = (gyro_raw.x - gyro_offset.x) * DEG_TO_RAD * gyro_constant;
@@ -709,9 +716,9 @@ void right_sensor(void *pvParameters)
             yaw_pwm = 1500;
         }
         
-        sprintf(payload, "Right:r%dp%dy%dm%d\n", roll_pwm, pitch_pwm, yaw_pwm, mode_pwm);
+        sprintf(payload, " Right:r%dp%d ", roll_pwm, pitch_pwm);
         // printf("%d\n", yaw_pwm);
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        vTaskDelay(DELAYRIGHT / portTICK_PERIOD_MS);
     }
 }
 
@@ -732,7 +739,7 @@ void left_sensor(void *pvParameters)
     float yaw, yaw_1, throttle;
     uint16_t yaw_pwm, throttle_pwm;
 
-    /*Timing Variable*/
+    //Timing Variable
     float now = 0, last = 0, delta_t = 0;
 
     /*Constant Variable*/
@@ -745,6 +752,7 @@ void left_sensor(void *pvParameters)
     // Initialize MPU6050
     mpu6050_handle_t mpu6050 = mpu6050_create(I2C_NUM_0, MPU6050_I2C_ADDRESS);
     mpu6050_init(mpu6050);
+    esp_err_t err;
    
     /* Payload Variable */
     // char *payload = (char *)pvParameters;
@@ -753,7 +761,7 @@ void left_sensor(void *pvParameters)
     for (int i = 0; i < 2000; i++)
     {
         /* code */
-        sensor_read(&gyro_raw, &acel_raw, mpu6050);
+        sensor_read(&gyro_raw, &acel_raw, mpu6050, 'l');
         gyro_offset.x += gyro_raw.x;
         gyro_offset.y += gyro_raw.y;
         gyro_offset.z += gyro_raw.z;
@@ -766,8 +774,13 @@ void left_sensor(void *pvParameters)
     while (true)
     {
         /* code */
-        sensor_read(&gyro_raw, &acel_raw, mpu6050);
-
+        err = sensor_read(&gyro_raw, &acel_raw, mpu6050, 'l');
+        if(err != 0 ) {
+            last = esp_timer_get_time();
+            printf("ERRORRRRRR \n");
+            vTaskDelay(DELAYLEFT / portTICK_PERIOD_MS);
+            continue;
+        } 
         /*Apply Offset & Scale Constant*/
         gyro_scaled.x = (gyro_raw.x - gyro_offset.x) * DEG_TO_RAD * gyro_constant;
         gyro_scaled.y = (gyro_raw.y - gyro_offset.y) * DEG_TO_RAD * gyro_constant;
@@ -855,13 +868,18 @@ void left_sensor(void *pvParameters)
         //     yaw_pwm -= 50;
         // }
 
-        sprintf(payload, "Left:y%d t%d\n", yaw_pwm, throttle_pwm);
+        sprintf(payload_2, "Left:y%d t%d\n", yaw_pwm, throttle_pwm);
         // printf("%d\n", yaw_pwm);
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+        vTaskDelay(DELAYLEFT / portTICK_PERIOD_MS);
     }
 }
 
-
+void task_print(void *pvParameters){
+    while(1){
+    printf("%s %s \n", payload, payload_2);
+    vTaskDelay(10 / portTICK_PERIOD_MS);
+    }
+}
 
 void app_main(void)
 {
@@ -872,9 +890,9 @@ void app_main(void)
     // wifi_connection();
 
     vTaskDelay(500 / portTICK_PERIOD_MS);
-    xTaskCreate(left_sensor, "left_sensor", 4096, NULL, 5, NULL);
+    xTaskCreate(left_sensor, "left_sensor", 4096, NULL, 4, NULL);
     xTaskCreate(right_sensor, "right_sensor", 4096, NULL, 5, NULL);
-    
+    xTaskCreate(task_print, "print", 4096, NULL, 6, NULL);
     // xTaskCreate(hmc5883l_task, "hmc5883l_task", 1024*8, NULL, 5, NULL);
     // xTaskCreate(udp_client_task, "udp_cilent_task", 4096, NULL, 4, NULL);
 }

@@ -1,13 +1,33 @@
 dependencies:
-  espressif/hmc5883l:
-    dependencies: []
+  eil/esp_idf_lib_helpers:
+    component_hash: eaee96f02db1bea59d369e53e46fd100331eb9d1d9726416cace4dd01f72698e
+    dependencies:
+    - name: idf
+      registry_url: https://components.espressif.com
+      require: private
+      version: '>=4.3'
     source:
-      path: E:\KULIAH-E\CAKSA\Remote-Transmitter\components\HMC5883L
-      type: local
-    version: 1.0
+      registry_url: https://components.espressif.com
+      type: service
+    version: 1.2.1
+  eil/i2cdev:
+    component_hash: 320f24484a1678083133ca19c195ea58740c188dd590626980b1cf2032539aaa
+    dependencies:
+    - name: idf
+      registry_url: https://components.espressif.com
+      require: private
+      version: '>=4.3'
+    - name: eil/esp_idf_lib_helpers
+      registry_url: https://components.espressif.com
+      require: private
+      version: '>=1.2.1'
+    source:
+      registry_url: https://components.espressif.com/
+      type: service
+    version: 1.5.1
   espressif/mpu6050:
     dependencies: []
-    source: 
+    source:
       path: E:\KULIAH-E\CAKSA\Remote-Transmitter\components\espressif__mpu6050
       type: local
     version: 1.2.0
@@ -16,8 +36,9 @@ dependencies:
       type: idf
     version: 5.3.1
 direct_dependencies:
+- eil/i2cdev
 - espressif/mpu6050
 - idf
-manifest_hash: ef3b5149a1949cb68dbcfbd7dbefee08c6f94bb7a2f28b3cb6ff103dd66f18ef
+manifest_hash: 8759e0ee11a5784b1c7e5ea90b995e293b9143722f892595d5915808d66120c9
 target: esp32
 version: 2.0.0

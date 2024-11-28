@@ -79,5 +79,8 @@ E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/nvs_sec_provider/libnvs_sec_p
 E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/perfmon/libperfmon.a
 E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/spiffs/libspiffs.a
 E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/wifi_provisioning/libwifi_provisioning.a
+E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/eil__i2cdev/libeil__i2cdev.a
 E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/espressif__mpu6050/libespressif__mpu6050.a
 E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/main/libmain.a
+E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/I2Cdev/libI2Cdev.a
+E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/HMC5883L/libHMC5883L.a

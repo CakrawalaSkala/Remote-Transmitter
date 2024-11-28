@@ -1,7 +1,7 @@
 {
     "version":            "1.1",
     "project_name":       "Remote",
-    "project_version":    "4b12f4a-dirty",
+    "project_version":    "099a818-dirty",
     "project_path":       "E:/KULIAH-E/CAKSA/Remote-Transmitter",
     "idf_path":           "C:/Users/Dericc/esp/esp-idf",
     "build_dir":          "E:/KULIAH-E/CAKSA/Remote-Transmitter/build",
@@ -21,13 +21,43 @@
     "monitor_toolprefix": "xtensa-esp32-elf-",
     "c_compiler":         "C:/Espressif/tools/xtensa-esp-elf/esp-13.2.0_20240530/xtensa-esp-elf/bin/xtensa-esp32-elf-gcc.exe",
     "config_environment" : {
-        "COMPONENT_KCONFIGS" : "C:/Users/Dericc/esp/esp-idf/components/app_trace/Kconfig;C:/Users/Dericc/esp/esp-idf/components/bt/Kconfig;C:/Users/Dericc/esp/esp-idf/components/console/Kconfig;C:/Users/Dericc/esp/esp-idf/components/driver/Kconfig;C:/Users/Dericc/esp/esp-idf/components/efuse/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp-tls/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_adc/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_coex/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_common/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_ana_cmpr/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_cam/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_dac/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_gpio/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_gptimer/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_i2c/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_i2s/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_isp/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_jpeg/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_ledc/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_mcpwm/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_parlio/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_pcnt/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_rmt/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_sdm/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_spi/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_touch_sens/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_tsens/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_uart/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_usb_serial_jtag/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_eth/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_event/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_gdbstub/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_http_client/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_http_server/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_https_ota/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_https_server/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_hw_support/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_lcd/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_netif/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_partition/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_phy/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_pm/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_psram/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_ringbuf/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_system/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_timer/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_wifi/Kconfig;C:/Users/Dericc/esp/esp-idf/components/espcoredump/Kconfig;C:/Users/Dericc/esp/esp-idf/components/fatfs/Kconfig;C:/Users/Dericc/esp/esp-idf/components/freertos/Kconfig;C:/Users/Dericc/esp/esp-idf/components/hal/Kconfig;C:/Users/Dericc/esp/esp-idf/components/heap/Kconfig;C:/Users/Dericc/esp/esp-idf/components/ieee802154/Kconfig;C:/Users/Dericc/esp/esp-idf/components/log/Kconfig;C:/Users/Dericc/esp/esp-idf/components/lwip/Kconfig;C:/Users/Dericc/esp/esp-idf/components/mbedtls/Kconfig;C:/Users/Dericc/esp/esp-idf/components/mqtt/esp-mqtt/Kconfig;C:/Users/Dericc/esp/esp-idf/components/newlib/Kconfig;C:/Users/Dericc/esp/esp-idf/components/nvs_flash/Kconfig;C:/Users/Dericc/esp/esp-idf/components/nvs_sec_provider/Kconfig;C:/Users/Dericc/esp/esp-idf/components/openthread/Kconfig;C:/Users/Dericc/esp/esp-idf/components/protocomm/Kconfig;C:/Users/Dericc/esp/esp-idf/components/pthread/Kconfig;C:/Users/Dericc/esp/esp-idf/components/soc/Kconfig;C:/Users/Dericc/esp/esp-idf/components/spi_flash/Kconfig;C:/Users/Dericc/esp/esp-idf/components/spiffs/Kconfig;C:/Users/Dericc/esp/esp-idf/components/tcp_transport/Kconfig;C:/Users/Dericc/esp/esp-idf/components/ulp/Kconfig;C:/Users/Dericc/esp/esp-idf/components/unity/Kconfig;C:/Users/Dericc/esp/esp-idf/components/usb/Kconfig;C:/Users/Dericc/esp/esp-idf/components/vfs/Kconfig;C:/Users/Dericc/esp/esp-idf/components/wear_levelling/Kconfig;C:/Users/Dericc/esp/esp-idf/components/wifi_provisioning/Kconfig",
+        "COMPONENT_KCONFIGS" : "C:/Users/Dericc/esp/esp-idf/components/app_trace/Kconfig;C:/Users/Dericc/esp/esp-idf/components/bt/Kconfig;C:/Users/Dericc/esp/esp-idf/components/console/Kconfig;C:/Users/Dericc/esp/esp-idf/components/driver/Kconfig;C:/Users/Dericc/esp/esp-idf/components/efuse/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp-tls/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_adc/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_coex/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_common/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_ana_cmpr/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_cam/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_dac/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_gpio/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_gptimer/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_i2c/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_i2s/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_isp/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_jpeg/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_ledc/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_mcpwm/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_parlio/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_pcnt/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_rmt/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_sdm/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_spi/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_touch_sens/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_tsens/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_uart/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_driver_usb_serial_jtag/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_eth/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_event/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_gdbstub/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_http_client/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_http_server/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_https_ota/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_https_server/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_hw_support/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_lcd/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_netif/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_partition/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_phy/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_pm/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_psram/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_ringbuf/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_system/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_timer/Kconfig;C:/Users/Dericc/esp/esp-idf/components/esp_wifi/Kconfig;C:/Users/Dericc/esp/esp-idf/components/espcoredump/Kconfig;C:/Users/Dericc/esp/esp-idf/components/fatfs/Kconfig;C:/Users/Dericc/esp/esp-idf/components/freertos/Kconfig;C:/Users/Dericc/esp/esp-idf/components/hal/Kconfig;C:/Users/Dericc/esp/esp-idf/components/heap/Kconfig;C:/Users/Dericc/esp/esp-idf/components/ieee802154/Kconfig;C:/Users/Dericc/esp/esp-idf/components/log/Kconfig;C:/Users/Dericc/esp/esp-idf/components/lwip/Kconfig;C:/Users/Dericc/esp/esp-idf/components/mbedtls/Kconfig;C:/Users/Dericc/esp/esp-idf/components/mqtt/esp-mqtt/Kconfig;C:/Users/Dericc/esp/esp-idf/components/newlib/Kconfig;C:/Users/Dericc/esp/esp-idf/components/nvs_flash/Kconfig;C:/Users/Dericc/esp/esp-idf/components/nvs_sec_provider/Kconfig;C:/Users/Dericc/esp/esp-idf/components/openthread/Kconfig;C:/Users/Dericc/esp/esp-idf/components/protocomm/Kconfig;C:/Users/Dericc/esp/esp-idf/components/pthread/Kconfig;C:/Users/Dericc/esp/esp-idf/components/soc/Kconfig;C:/Users/Dericc/esp/esp-idf/components/spi_flash/Kconfig;C:/Users/Dericc/esp/esp-idf/components/spiffs/Kconfig;C:/Users/Dericc/esp/esp-idf/components/tcp_transport/Kconfig;C:/Users/Dericc/esp/esp-idf/components/ulp/Kconfig;C:/Users/Dericc/esp/esp-idf/components/unity/Kconfig;C:/Users/Dericc/esp/esp-idf/components/usb/Kconfig;C:/Users/Dericc/esp/esp-idf/components/vfs/Kconfig;C:/Users/Dericc/esp/esp-idf/components/wear_levelling/Kconfig;C:/Users/Dericc/esp/esp-idf/components/wifi_provisioning/Kconfig;E:/KULIAH-E/CAKSA/Remote-Transmitter/managed_components/eil__i2cdev/Kconfig",
         "COMPONENT_KCONFIGS_PROJBUILD" : "C:/Users/Dericc/esp/esp-idf/components/bootloader/Kconfig.projbuild;C:/Users/Dericc/esp/esp-idf/components/esp_app_format/Kconfig.projbuild;C:/Users/Dericc/esp/esp-idf/components/esp_rom/Kconfig.projbuild;C:/Users/Dericc/esp/esp-idf/components/esptool_py/Kconfig.projbuild;C:/Users/Dericc/esp/esp-idf/components/partition_table/Kconfig.projbuild"
     },
     "common_component_reqs": [ "cxx", "newlib", "freertos", "esp_hw_support", "heap", "log", "soc", "hal", "esp_rom", "esp_common", "esp_system", "xtensa" ],
-    "build_components" : [ "app_trace", "app_update", "bootloader", "bootloader_support", "bt", "cmock", "console", "cxx", "driver", "efuse", "esp-tls", "esp_adc", "esp_app_format", "esp_bootloader_format", "esp_coex", "esp_common", "esp_driver_ana_cmpr", "esp_driver_cam", "esp_driver_dac", "esp_driver_gpio", "esp_driver_gptimer", "esp_driver_i2c", "esp_driver_i2s", "esp_driver_isp", "esp_driver_jpeg", "esp_driver_ledc", "esp_driver_mcpwm", "esp_driver_parlio", "esp_driver_pcnt", "esp_driver_ppa", "esp_driver_rmt", "esp_driver_sdio", "esp_driver_sdm", "esp_driver_sdmmc", "esp_driver_sdspi", "esp_driver_spi", "esp_driver_touch_sens", "esp_driver_tsens", "esp_driver_uart", "esp_driver_usb_serial_jtag", "esp_eth", "esp_event", "esp_gdbstub", "esp_hid", "esp_http_client", "esp_http_server", "esp_https_ota", "esp_https_server", "esp_hw_support", "esp_lcd", "esp_local_ctrl", "esp_mm", "esp_netif", "esp_netif_stack", "esp_partition", "esp_phy", "esp_pm", "esp_psram", "esp_ringbuf", "esp_rom", "esp_system", "esp_timer", "esp_vfs_console", "esp_wifi", "espcoredump", "espressif__mpu6050", "esptool_py", "fatfs", "freertos", "hal", "heap", "http_parser", "idf_test", "ieee802154", "json", "log", "lwip", "main", "mbedtls", "mqtt", "newlib", "nvs_flash", "nvs_sec_provider", "openthread", "partition_table", "perfmon", "protobuf-c", "protocomm", "pthread", "sdmmc", "soc", "spi_flash", "spiffs", "tcp_transport", "ulp", "unity", "usb", "vfs", "wear_levelling", "wifi_provisioning", "wpa_supplicant", "xtensa", "" ],
-    "build_component_paths" : [ "C:/Users/Dericc/esp/esp-idf/components/app_trace", "C:/Users/Dericc/esp/esp-idf/components/app_update", "C:/Users/Dericc/esp/esp-idf/components/bootloader", "C:/Users/Dericc/esp/esp-idf/components/bootloader_support", "C:/Users/Dericc/esp/esp-idf/components/bt", "C:/Users/Dericc/esp/esp-idf/components/cmock", "C:/Users/Dericc/esp/esp-idf/components/console", "C:/Users/Dericc/esp/esp-idf/components/cxx", "C:/Users/Dericc/esp/esp-idf/components/driver", "C:/Users/Dericc/esp/esp-idf/components/efuse", "C:/Users/Dericc/esp/esp-idf/components/esp-tls", "C:/Users/Dericc/esp/esp-idf/components/esp_adc", "C:/Users/Dericc/esp/esp-idf/components/esp_app_format", "C:/Users/Dericc/esp/esp-idf/components/esp_bootloader_format", "C:/Users/Dericc/esp/esp-idf/components/esp_coex", "C:/Users/Dericc/esp/esp-idf/components/esp_common", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_ana_cmpr", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_cam", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_dac", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_gpio", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_gptimer", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_i2c", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_i2s", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_isp", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_jpeg", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_ledc", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_mcpwm", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_parlio", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_pcnt", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_ppa", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_rmt", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_sdio", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_sdm", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_sdmmc", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_sdspi", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_spi", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_touch_sens", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_tsens", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_uart", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_usb_serial_jtag", "C:/Users/Dericc/esp/esp-idf/components/esp_eth", "C:/Users/Dericc/esp/esp-idf/components/esp_event", "C:/Users/Dericc/esp/esp-idf/components/esp_gdbstub", "C:/Users/Dericc/esp/esp-idf/components/esp_hid", "C:/Users/Dericc/esp/esp-idf/components/esp_http_client", "C:/Users/Dericc/esp/esp-idf/components/esp_http_server", "C:/Users/Dericc/esp/esp-idf/components/esp_https_ota", "C:/Users/Dericc/esp/esp-idf/components/esp_https_server", "C:/Users/Dericc/esp/esp-idf/components/esp_hw_support", "C:/Users/Dericc/esp/esp-idf/components/esp_lcd", "C:/Users/Dericc/esp/esp-idf/components/esp_local_ctrl", "C:/Users/Dericc/esp/esp-idf/components/esp_mm", "C:/Users/Dericc/esp/esp-idf/components/esp_netif", "C:/Users/Dericc/esp/esp-idf/components/esp_netif_stack", "C:/Users/Dericc/esp/esp-idf/components/esp_partition", "C:/Users/Dericc/esp/esp-idf/components/esp_phy", "C:/Users/Dericc/esp/esp-idf/components/esp_pm", "C:/Users/Dericc/esp/esp-idf/components/esp_psram", "C:/Users/Dericc/esp/esp-idf/components/esp_ringbuf", "C:/Users/Dericc/esp/esp-idf/components/esp_rom", "C:/Users/Dericc/esp/esp-idf/components/esp_system", "C:/Users/Dericc/esp/esp-idf/components/esp_timer", "C:/Users/Dericc/esp/esp-idf/components/esp_vfs_console", "C:/Users/Dericc/esp/esp-idf/components/esp_wifi", "C:/Users/Dericc/esp/esp-idf/components/espcoredump", "E:/KULIAH-E/CAKSA/Remote-Transmitter/components/espressif__mpu6050", "C:/Users/Dericc/esp/esp-idf/components/esptool_py", "C:/Users/Dericc/esp/esp-idf/components/fatfs", "C:/Users/Dericc/esp/esp-idf/components/freertos", "C:/Users/Dericc/esp/esp-idf/components/hal", "C:/Users/Dericc/esp/esp-idf/components/heap", "C:/Users/Dericc/esp/esp-idf/components/http_parser", "C:/Users/Dericc/esp/esp-idf/components/idf_test", "C:/Users/Dericc/esp/esp-idf/components/ieee802154", "C:/Users/Dericc/esp/esp-idf/components/json", "C:/Users/Dericc/esp/esp-idf/components/log", "C:/Users/Dericc/esp/esp-idf/components/lwip", "E:/KULIAH-E/CAKSA/Remote-Transmitter/main", "C:/Users/Dericc/esp/esp-idf/components/mbedtls", "C:/Users/Dericc/esp/esp-idf/components/mqtt", "C:/Users/Dericc/esp/esp-idf/components/newlib", "C:/Users/Dericc/esp/esp-idf/components/nvs_flash", "C:/Users/Dericc/esp/esp-idf/components/nvs_sec_provider", "C:/Users/Dericc/esp/esp-idf/components/openthread", "C:/Users/Dericc/esp/esp-idf/components/partition_table", "C:/Users/Dericc/esp/esp-idf/components/perfmon", "C:/Users/Dericc/esp/esp-idf/components/protobuf-c", "C:/Users/Dericc/esp/esp-idf/components/protocomm", "C:/Users/Dericc/esp/esp-idf/components/pthread", "C:/Users/Dericc/esp/esp-idf/components/sdmmc", "C:/Users/Dericc/esp/esp-idf/components/soc", "C:/Users/Dericc/esp/esp-idf/components/spi_flash", "C:/Users/Dericc/esp/esp-idf/components/spiffs", "C:/Users/Dericc/esp/esp-idf/components/tcp_transport", "C:/Users/Dericc/esp/esp-idf/components/ulp", "C:/Users/Dericc/esp/esp-idf/components/unity", "C:/Users/Dericc/esp/esp-idf/components/usb", "C:/Users/Dericc/esp/esp-idf/components/vfs", "C:/Users/Dericc/esp/esp-idf/components/wear_levelling", "C:/Users/Dericc/esp/esp-idf/components/wifi_provisioning", "C:/Users/Dericc/esp/esp-idf/components/wpa_supplicant", "C:/Users/Dericc/esp/esp-idf/components/xtensa", "" ],
+    "build_components" : [ "HMC5883L", "I2Cdev", "app_trace", "app_update", "bootloader", "bootloader_support", "bt", "cmock", "console", "cxx", "driver", "efuse", "eil__esp_idf_lib_helpers", "eil__i2cdev", "esp-tls", "esp_adc", "esp_app_format", "esp_bootloader_format", "esp_coex", "esp_common", "esp_driver_ana_cmpr", "esp_driver_cam", "esp_driver_dac", "esp_driver_gpio", "esp_driver_gptimer", "esp_driver_i2c", "esp_driver_i2s", "esp_driver_isp", "esp_driver_jpeg", "esp_driver_ledc", "esp_driver_mcpwm", "esp_driver_parlio", "esp_driver_pcnt", "esp_driver_ppa", "esp_driver_rmt", "esp_driver_sdio", "esp_driver_sdm", "esp_driver_sdmmc", "esp_driver_sdspi", "esp_driver_spi", "esp_driver_touch_sens", "esp_driver_tsens", "esp_driver_uart", "esp_driver_usb_serial_jtag", "esp_eth", "esp_event", "esp_gdbstub", "esp_hid", "esp_http_client", "esp_http_server", "esp_https_ota", "esp_https_server", "esp_hw_support", "esp_lcd", "esp_local_ctrl", "esp_mm", "esp_netif", "esp_netif_stack", "esp_partition", "esp_phy", "esp_pm", "esp_psram", "esp_ringbuf", "esp_rom", "esp_system", "esp_timer", "esp_vfs_console", "esp_wifi", "espcoredump", "espressif__mpu6050", "esptool_py", "fatfs", "freertos", "hal", "heap", "http_parser", "idf_test", "ieee802154", "json", "log", "lwip", "main", "mbedtls", "mqtt", "newlib", "nvs_flash", "nvs_sec_provider", "openthread", "partition_table", "perfmon", "protobuf-c", "protocomm", "pthread", "sdmmc", "soc", "spi_flash", "spiffs", "tcp_transport", "ulp", "unity", "usb", "vfs", "wear_levelling", "wifi_provisioning", "wpa_supplicant", "xtensa", "" ],
+    "build_component_paths" : [ "E:/KULIAH-E/CAKSA/Remote-Transmitter/components/HMC5883L", "E:/KULIAH-E/CAKSA/Remote-Transmitter/components/I2Cdev", "C:/Users/Dericc/esp/esp-idf/components/app_trace", "C:/Users/Dericc/esp/esp-idf/components/app_update", "C:/Users/Dericc/esp/esp-idf/components/bootloader", "C:/Users/Dericc/esp/esp-idf/components/bootloader_support", "C:/Users/Dericc/esp/esp-idf/components/bt", "C:/Users/Dericc/esp/esp-idf/components/cmock", "C:/Users/Dericc/esp/esp-idf/components/console", "C:/Users/Dericc/esp/esp-idf/components/cxx", "C:/Users/Dericc/esp/esp-idf/components/driver", "C:/Users/Dericc/esp/esp-idf/components/efuse", "E:/KULIAH-E/CAKSA/Remote-Transmitter/managed_components/eil__esp_idf_lib_helpers", "E:/KULIAH-E/CAKSA/Remote-Transmitter/managed_components/eil__i2cdev", "C:/Users/Dericc/esp/esp-idf/components/esp-tls", "C:/Users/Dericc/esp/esp-idf/components/esp_adc", "C:/Users/Dericc/esp/esp-idf/components/esp_app_format", "C:/Users/Dericc/esp/esp-idf/components/esp_bootloader_format", "C:/Users/Dericc/esp/esp-idf/components/esp_coex", "C:/Users/Dericc/esp/esp-idf/components/esp_common", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_ana_cmpr", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_cam", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_dac", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_gpio", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_gptimer", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_i2c", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_i2s", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_isp", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_jpeg", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_ledc", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_mcpwm", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_parlio", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_pcnt", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_ppa", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_rmt", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_sdio", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_sdm", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_sdmmc", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_sdspi", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_spi", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_touch_sens", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_tsens", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_uart", "C:/Users/Dericc/esp/esp-idf/components/esp_driver_usb_serial_jtag", "C:/Users/Dericc/esp/esp-idf/components/esp_eth", "C:/Users/Dericc/esp/esp-idf/components/esp_event", "C:/Users/Dericc/esp/esp-idf/components/esp_gdbstub", "C:/Users/Dericc/esp/esp-idf/components/esp_hid", "C:/Users/Dericc/esp/esp-idf/components/esp_http_client", "C:/Users/Dericc/esp/esp-idf/components/esp_http_server", "C:/Users/Dericc/esp/esp-idf/components/esp_https_ota", "C:/Users/Dericc/esp/esp-idf/components/esp_https_server", "C:/Users/Dericc/esp/esp-idf/components/esp_hw_support", "C:/Users/Dericc/esp/esp-idf/components/esp_lcd", "C:/Users/Dericc/esp/esp-idf/components/esp_local_ctrl", "C:/Users/Dericc/esp/esp-idf/components/esp_mm", "C:/Users/Dericc/esp/esp-idf/components/esp_netif", "C:/Users/Dericc/esp/esp-idf/components/esp_netif_stack", "C:/Users/Dericc/esp/esp-idf/components/esp_partition", "C:/Users/Dericc/esp/esp-idf/components/esp_phy", "C:/Users/Dericc/esp/esp-idf/components/esp_pm", "C:/Users/Dericc/esp/esp-idf/components/esp_psram", "C:/Users/Dericc/esp/esp-idf/components/esp_ringbuf", "C:/Users/Dericc/esp/esp-idf/components/esp_rom", "C:/Users/Dericc/esp/esp-idf/components/esp_system", "C:/Users/Dericc/esp/esp-idf/components/esp_timer", "C:/Users/Dericc/esp/esp-idf/components/esp_vfs_console", "C:/Users/Dericc/esp/esp-idf/components/esp_wifi", "C:/Users/Dericc/esp/esp-idf/components/espcoredump", "E:/KULIAH-E/CAKSA/Remote-Transmitter/components/espressif__mpu6050", "C:/Users/Dericc/esp/esp-idf/components/esptool_py", "C:/Users/Dericc/esp/esp-idf/components/fatfs", "C:/Users/Dericc/esp/esp-idf/components/freertos", "C:/Users/Dericc/esp/esp-idf/components/hal", "C:/Users/Dericc/esp/esp-idf/components/heap", "C:/Users/Dericc/esp/esp-idf/components/http_parser", "C:/Users/Dericc/esp/esp-idf/components/idf_test", "C:/Users/Dericc/esp/esp-idf/components/ieee802154", "C:/Users/Dericc/esp/esp-idf/components/json", "C:/Users/Dericc/esp/esp-idf/components/log", "C:/Users/Dericc/esp/esp-idf/components/lwip", "E:/KULIAH-E/CAKSA/Remote-Transmitter/main", "C:/Users/Dericc/esp/esp-idf/components/mbedtls", "C:/Users/Dericc/esp/esp-idf/components/mqtt", "C:/Users/Dericc/esp/esp-idf/components/newlib", "C:/Users/Dericc/esp/esp-idf/components/nvs_flash", "C:/Users/Dericc/esp/esp-idf/components/nvs_sec_provider", "C:/Users/Dericc/esp/esp-idf/components/openthread", "C:/Users/Dericc/esp/esp-idf/components/partition_table", "C:/Users/Dericc/esp/esp-idf/components/perfmon", "C:/Users/Dericc/esp/esp-idf/components/protobuf-c", "C:/Users/Dericc/esp/esp-idf/components/protocomm", "C:/Users/Dericc/esp/esp-idf/components/pthread", "C:/Users/Dericc/esp/esp-idf/components/sdmmc", "C:/Users/Dericc/esp/esp-idf/components/soc", "C:/Users/Dericc/esp/esp-idf/components/spi_flash", "C:/Users/Dericc/esp/esp-idf/components/spiffs", "C:/Users/Dericc/esp/esp-idf/components/tcp_transport", "C:/Users/Dericc/esp/esp-idf/components/ulp", "C:/Users/Dericc/esp/esp-idf/components/unity", "C:/Users/Dericc/esp/esp-idf/components/usb", "C:/Users/Dericc/esp/esp-idf/components/vfs", "C:/Users/Dericc/esp/esp-idf/components/wear_levelling", "C:/Users/Dericc/esp/esp-idf/components/wifi_provisioning", "C:/Users/Dericc/esp/esp-idf/components/wpa_supplicant", "C:/Users/Dericc/esp/esp-idf/components/xtensa", "" ],
     "build_component_info" : {
+        "HMC5883L": {
+            "alias": "idf::HMC5883L",
+            "target": "___idf_HMC5883L",
+            "prefix": "idf",
+            "dir": "E:/KULIAH-E/CAKSA/Remote-Transmitter/components/HMC5883L",
+            "type": "LIBRARY",
+            "lib": "__idf_HMC5883L",
+            "reqs": [ "I2Cdev" ],
+            "priv_reqs": [ "driver", "esp_timer" ],
+            "managed_reqs": [],
+            "managed_priv_reqs": [],
+            "file": "E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/HMC5883L/libHMC5883L.a",
+            "sources": [ "E:/KULIAH-E/CAKSA/Remote-Transmitter/components/HMC5883L/HMC5883L.cpp" ],
+            "include_dirs": [ "." ]
+        },
+        "I2Cdev": {
+            "alias": "idf::I2Cdev",
+            "target": "___idf_I2Cdev",
+            "prefix": "idf",
+            "dir": "E:/KULIAH-E/CAKSA/Remote-Transmitter/components/I2Cdev",
+            "type": "LIBRARY",
+            "lib": "__idf_I2Cdev",
+            "reqs": [],
+            "priv_reqs": [ "driver" ],
+            "managed_reqs": [],
+            "managed_priv_reqs": [],
+            "file": "E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/I2Cdev/libI2Cdev.a",
+            "sources": [ "E:/KULIAH-E/CAKSA/Remote-Transmitter/components/I2Cdev/I2Cdev.cpp" ],
+            "include_dirs": [ "." ]
+        },
         "app_trace": {
             "alias": "idf::app_trace",
             "target": "___idf_app_trace",
@@ -177,6 +207,36 @@
             "file": "E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/efuse/libefuse.a",
             "sources": [ "C:/Users/Dericc/esp/esp-idf/components/efuse/esp32/esp_efuse_table.c", "C:/Users/Dericc/esp/esp-idf/components/efuse/esp32/esp_efuse_fields.c", "C:/Users/Dericc/esp/esp-idf/components/efuse/esp32/esp_efuse_utility.c", "C:/Users/Dericc/esp/esp-idf/components/efuse/src/esp_efuse_api.c", "C:/Users/Dericc/esp/esp-idf/components/efuse/src/esp_efuse_fields.c", "C:/Users/Dericc/esp/esp-idf/components/efuse/src/esp_efuse_utility.c", "C:/Users/Dericc/esp/esp-idf/components/efuse/src/efuse_controller/keys/without_key_purposes/three_key_blocks/esp_efuse_api_key.c", "C:/Users/Dericc/esp/esp-idf/components/efuse/src/esp_efuse_startup.c" ],
             "include_dirs": [ "include", "esp32/include" ]
+        },
+        "eil__esp_idf_lib_helpers": {
+            "alias": "idf::eil__esp_idf_lib_helpers",
+            "target": "___idf_eil__esp_idf_lib_helpers",
+            "prefix": "idf",
+            "dir": "E:/KULIAH-E/CAKSA/Remote-Transmitter/managed_components/eil__esp_idf_lib_helpers",
+            "type": "CONFIG_ONLY",
+            "lib": "__idf_eil__esp_idf_lib_helpers",
+            "reqs": [ "freertos" ],
+            "priv_reqs": [],
+            "managed_reqs": [],
+            "managed_priv_reqs": [],
+            "file": "",
+            "sources": [],
+            "include_dirs": [ "." ]
+        },
+        "eil__i2cdev": {
+            "alias": "idf::eil__i2cdev",
+            "target": "___idf_eil__i2cdev",
+            "prefix": "idf",
+            "dir": "E:/KULIAH-E/CAKSA/Remote-Transmitter/managed_components/eil__i2cdev",
+            "type": "LIBRARY",
+            "lib": "__idf_eil__i2cdev",
+            "reqs": [ "driver", "freertos", "eil__esp_idf_lib_helpers" ],
+            "priv_reqs": [ "eil__esp_idf_lib_helpers" ],
+            "managed_reqs": [],
+            "managed_priv_reqs": [ "eil__esp_idf_lib_helpers" ],
+            "file": "E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/eil__i2cdev/libeil__i2cdev.a",
+            "sources": [ "E:/KULIAH-E/CAKSA/Remote-Transmitter/managed_components/eil__i2cdev/i2cdev.c" ],
+            "include_dirs": [ "." ]
         },
         "esp-tls": {
             "alias": "idf::esp-tls",
@@ -1191,9 +1251,9 @@
             "type": "LIBRARY",
             "lib": "__idf_main",
             "reqs": [],
-            "priv_reqs": [ "espressif__mpu6050" ],
+            "priv_reqs": [ "eil__i2cdev", "espressif__mpu6050" ],
             "managed_reqs": [],
-            "managed_priv_reqs": [ "espressif__mpu6050" ],
+            "managed_priv_reqs": [ "eil__i2cdev", "espressif__mpu6050" ],
             "file": "E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/main/libmain.a",
             "sources": [ "E:/KULIAH-E/CAKSA/Remote-Transmitter/main/main.c" ],
             "include_dirs": [ "." ]
@@ -2803,9 +2863,33 @@
             "dir": "E:/KULIAH-E/CAKSA/Remote-Transmitter/main",
             "lib": "__idf_main",
             "reqs": [],
-            "priv_reqs": [ "espressif__mpu6050" ],
+            "priv_reqs": [ "eil__i2cdev", "espressif__mpu6050" ],
             "managed_reqs": [],
-            "managed_priv_reqs": [ "espressif__mpu6050" ],
+            "managed_priv_reqs": [ "eil__i2cdev", "espressif__mpu6050" ],
+            "include_dirs": [ "." ]
+        },
+        "HMC5883L": {
+            "alias": "idf::HMC5883L",
+            "target": "___idf_HMC5883L",
+            "prefix": "idf",
+            "dir": "E:/KULIAH-E/CAKSA/Remote-Transmitter/components/HMC5883L",
+            "lib": "__idf_HMC5883L",
+            "reqs": [ "I2Cdev" ],
+            "priv_reqs": [ "driver", "esp_timer" ],
+            "managed_reqs": [],
+            "managed_priv_reqs": [],
+            "include_dirs": [ "." ]
+        },
+        "I2Cdev": {
+            "alias": "idf::I2Cdev",
+            "target": "___idf_I2Cdev",
+            "prefix": "idf",
+            "dir": "E:/KULIAH-E/CAKSA/Remote-Transmitter/components/I2Cdev",
+            "lib": "__idf_I2Cdev",
+            "reqs": [],
+            "priv_reqs": [ "driver" ],
+            "managed_reqs": [],
+            "managed_priv_reqs": [],
             "include_dirs": [ "." ]
         },
         "espressif__mpu6050": {
@@ -2819,6 +2903,30 @@
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "include_dirs": [ "include" ]
+        },
+        "eil__esp_idf_lib_helpers": {
+            "alias": "idf::eil__esp_idf_lib_helpers",
+            "target": "___idf_eil__esp_idf_lib_helpers",
+            "prefix": "idf",
+            "dir": "E:/KULIAH-E/CAKSA/Remote-Transmitter/managed_components/eil__esp_idf_lib_helpers",
+            "lib": "__idf_eil__esp_idf_lib_helpers",
+            "reqs": [ "freertos" ],
+            "priv_reqs": [],
+            "managed_reqs": [],
+            "managed_priv_reqs": [],
+            "include_dirs": [ "." ]
+        },
+        "eil__i2cdev": {
+            "alias": "idf::eil__i2cdev",
+            "target": "___idf_eil__i2cdev",
+            "prefix": "idf",
+            "dir": "E:/KULIAH-E/CAKSA/Remote-Transmitter/managed_components/eil__i2cdev",
+            "lib": "__idf_eil__i2cdev",
+            "reqs": [ "driver", "freertos", "eil__esp_idf_lib_helpers" ],
+            "priv_reqs": [ "eil__esp_idf_lib_helpers" ],
+            "managed_reqs": [],
+            "managed_priv_reqs": [ "eil__esp_idf_lib_helpers" ],
+            "include_dirs": [ "." ]
         }
     },
     "debug_prefix_map_gdbinit": ""

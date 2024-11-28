@@ -539,11 +539,31 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
+  include("E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/eil__esp_idf_lib_helpers/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/eil__i2cdev/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
   include("E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/espressif__mpu6050/cmake_install.cmake")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
   include("E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/main/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/I2Cdev/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("E:/KULIAH-E/CAKSA/Remote-Transmitter/build/esp-idf/HMC5883L/cmake_install.cmake")
 endif()
 

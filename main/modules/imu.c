@@ -132,6 +132,12 @@ void Mahony_Update(float q[4], struct imu_data gyro, struct imu_data acce, float
     q[2] *= recipNorm;
 }
 
+struct full_imu_data create_full_imu_data() {
+    struct full_imu_data data;
+    data.q[0] = 1.0;
+
+    return data;
+}
 
 esp_err_t imu_read_raw(mpu6050_handle_t mpu6050, struct imu_data *gyro, struct imu_data *acce) {
     /* MPU6050 variable*/
@@ -172,7 +178,6 @@ mpu6050_handle_t imu_init(i2c_port_t port, const uint16_t dev_addr) {
 
     mpu6050_wake_up(mpu6050);
     mpu6050_config(mpu6050, ACCE_FS_2G, GYRO_FS_250DPS);
-    vTaskDelay(1 / portTICK_PERIOD_MS);
 
     return mpu6050;
 }

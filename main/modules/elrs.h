@@ -1,10 +1,17 @@
+
 #include "driver/gpio.h"
+
+
+#define MAX_CHANNEL_VALUE 1984
+#define MIN_CHANNEL_VALUE 0
+#define PACKET_LENGTH 26
+
 
 typedef enum {
     DEVICE_ADDRESS_BROADCAST = 0x00,
     DEVICE_ADDRESS_FLIGHT_CONTROLLER = 0xC8,
     DEVICE_ADDRESS_REMOTE_CONTROL = 0xEA,
-    DEVICE_ADDRESS_RC_TRANSMITTER = 0xEE,
+    DEVICE_ADDRESS_TX_MODULE = 0xEE,
 } crsf_device_address_t;
 
 typedef enum {
@@ -24,7 +31,7 @@ typedef enum {
     CROSSFIRE_COMMAND_CANCEL_BIND = 0x02,
     CROSSFIRE_COMMAND_SET_BIND_ID = 0x03,
     CROSSFIRE_COMMAND_MODEL_SELECT = 0x05,
-    COMMAND_CROSSFIRE = 0x32,
+    // COMMAND_CROSSFIRE = 0x32,
 } crsf_crossfire_commands_t;
 
 typedef enum {
@@ -36,5 +43,28 @@ typedef enum {
     COMMAND,
 } crsf_frame_crc_type;
 
+typedef enum{
+    ROLL = 0,
+    PITCH = 1,
+    THROTTLE = 2,
+    YAW = 3,
+    AUX1 = 4,
+    AUX2 = 5,
+    AUX3 = 6,
+    AUX4 = 7,
+    AUX5 = 8,
+    AUX6 = 9,
+    AUX7 = 10,
+    AUX8 = 11,
+    AUX9 = 12,
+    AUX10 = 13,
+    AUX11 = 14,
+    AUX12 = 15
+} crsf_channels_type;
+
 void prepare_crsf_frame();
 void elrs_send_data(const int port, const uint8_t *data, size_t len);
+void create_crsf_channels_packet(uint16_t *channels, uint8_t *packet);
+void pack_crsf_to_bytes(uint16_t *channels, uint8_t *result);
+uint8_t get_command_crc8(uint8_t *buf, size_t size);
+uint8_t get_crc8(uint8_t *buf, size_t size);

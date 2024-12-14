@@ -5,19 +5,50 @@
 #include "driver/i2c.h"
 #include "driver/adc.h"
 #include "esp_adc_cal.h"
+#include "driver/uart.h"
+#include "esp_log.h"
 
 #include "modules/utils.c"
 #include "modules/imu.h"
+#include "modules/elrs.h"
 
 #include "esp_timer.h"
 
 #include "esp_log.h"
 
-uint16_t roll, pitch, yaw, throttle;
+// ELRS UART
+#define UART_NUM UART_NUM_2
+#define TX_PIN 17
+#define RX_PIN 16
 
 // IMU
 bool left_calibrated = false;
 bool right_calibrated = false;
+
+uint16_t channels[16] = {0};
+
+
+void uart_init() {
+    const uart_config_t uart_config = {
+        .baud_rate = 921600, //912600
+        .data_bits = UART_DATA_8_BITS,
+        .parity = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+    };
+
+    // Install UART driver
+    uart_driver_install(UART_NUM, 1024, 1024, 0, NULL, 0);
+    // Configure UART parameters
+    uart_param_config(UART_NUM, &uart_config);
+    // Set pins
+    uart_set_pin(UART_NUM, TX_PIN, RX_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+    // Set UART mode to half-duplex
+    uart_set_mode(UART_NUM, UART_MODE_UART);
+    // Invert RX and TX signals
+    uart_set_line_inverse(UART_NUM, UART_SIGNAL_TXD_INV);
+    // UART_SIGNAL_RXD_INV
+}
 
 void switch_init() {
     /*Switch Mode Init pin : D5 or GPIO 5 */
@@ -30,7 +61,7 @@ void switch_init() {
     };
     gpio_config(&io_conf1);
 
-    /*Switch Mode Init pin : D4 or GPIO 4 */
+    /*Switch Mode Init` pin : D4 or GPIO 4 */
     gpio_config_t io_conf2 = {
         .intr_type = GPIO_INTR_DISABLE,        // Disable interrupt
         .mode = GPIO_MODE_INPUT,               // Set as output mode
@@ -106,8 +137,8 @@ void left_imu_task() {
         imu_read(imu, &imu_data);
 
         /*Mapping degree to PWM*/
-        throttle = mapValue(imu_data.processed.x, -30, 30, 1000, 2000);
-        yaw = mapValue(imu_data.processed.y, -30, 30, 1000, 2000);
+        channels[THROTTLE] = mapValue(imu_data.processed.x, -30, 30, 0, MAX_CHANNEL_VALUE);
+        channels[YAW] = mapValue(imu_data.processed.y, -30, 30, 0, MAX_CHANNEL_VALUE);
 
         // Deadzone
         // if (yaw_pwm > 1450 && yaw_pwm < 1550) {
@@ -142,32 +173,85 @@ void right_imu_task() {
         imu_read(imu, &imu_data);
 
         /*Mapping degree to PWM*/
-        roll = mapValue(imu_data.processed.y, -45, 45, 1000, 2000);
-        pitch = mapValue(imu_data.processed.x, -45, 45, 2000, 1000);
+        channels[ROLL] = mapValue(imu_data.processed.y, -45, 45, 0, MAX_CHANNEL_VALUE);
+        channels[PITCH] = mapValue(imu_data.processed.x, -45, 45, MAX_CHANNEL_VALUE, 0);
 
         vTaskDelay(10 / portTICK_PERIOD_MS);
     }
 }
 
+
+#define DELAYTIME 4
 // ELRS related task
+//create task that will be executed 3ms regularly
 
-void elrs_send_payload_task() {
-}
+void elrs_task(void * pvParameters) {
 
-void send_payload_task() {
-    while (true) {
-        if (left_calibrated && right_calibrated) {
-            printf("r%dp%dy%dt%d\n", roll, pitch, yaw, throttle);
-        }
-        vTaskDelay(10 / portTICK_PERIOD_MS);
+/*
+ frame = bytearray([
+            0xC8,
+            0x08,
+            0x32,
+            TX_ADDR,# Destination
+            RC_ADDR,       # Origin
+            0x10,
+            0x05,
+            model_num,
+               # Command CRC (placeholder)
+        ])
+        # Calculate command CRC
+        # frame[8] = self.calculate_command_crc(frame[2:8])
+        # Add frame CRC
+        frame.append(self.calculate_command_crc(frame[2:]))
+        frame.append(self.calculate_crc(frame[2:]))
+        self.serial.write(frame)
+*/
+
+    uint8_t packet[PACKET_LENGTH] = {0};
+    uint8_t packetCommand[10] = {
+        0xC8,
+        0x08,
+        0x32,
+        DEVICE_ADDRESS_TX_MODULE,
+        DEVICE_ADDRESS_REMOTE_CONTROL,
+        0x10,
+        0x05,
+        0x01,
+    };
+
+    packetCommand[8] = get_command_crc8(&packetCommand[2], 6);
+    packetCommand[9] = get_crc8(&packetCommand[2], 7);
+
+    packet[0] = 0xC8;
+    // TickType_t lastTick;
+    // const TickType_t delay = pdMS_TO_TICKS(3);
+    // lastTick = xTaskGetTickCount();
+    int first  = 1;
+    while (true)
+    {   
+
+    if(first){
+        
+    for(int i = 0; i < 10; i++){
+    elrs_send_data(UART_NUM, packetCommand, 10);
+    vTaskDelay(DELAYTIME / portTICK_PERIOD_MS);
     }
+    first = 0;
+    }
+        create_crsf_channels_packet(channels, packet);
+        elrs_send_data(UART_NUM, packet, PACKET_LENGTH);
+        vTaskDelay(DELAYTIME / portTICK_PERIOD_MS); // ojo diganti
+        // vTaskDelayUntil(&lastTick, delay);
+    }
+    
 }
 
 void app_main(void) {
+    uart_init();
     i2c_init();
     // switch_init();
 
-    xTaskCreate(left_imu_task, "left_imu", 4096, NULL, 4, NULL);
-    xTaskCreate(right_imu_task, "right_imu", 4096, NULL, 4, NULL);
-    xTaskCreate(send_payload_task, "send_payload", 4096, NULL, 5, NULL);
+    // xTaskCreate(left_imu_task, "left_imu", 4096, NULL, 4, NULL);
+    // xTaskCreate(right_imu_task, "right_imu", 4096, NULL, 4, NULL);
+    xTaskCreate(elrs_task, "send_payload", 4096, NULL, 5, NULL);
 }

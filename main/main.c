@@ -7,6 +7,7 @@
 #include "esp_adc_cal.h"
 #include "driver/uart.h"
 #include "esp_log.h"
+#include "esp_timer.h"
 
 #include "modules/utils.c"
 #include "modules/imu.h"
@@ -16,16 +17,53 @@
 
 #include "esp_log.h"
 
+
+
+static const char* TAG = "Tes";
+
+
 // ELRS UART
 #define UART_NUM UART_NUM_2
 #define TX_PIN 17
 #define RX_PIN 16
+
+//TIMER
+#define INTERVALMS 3 * 1000 // in microseconds
+static void timer_callback(void* arg);
+bool transmit_yet = 0;
 
 // IMU
 bool left_calibrated = false;
 bool right_calibrated = false;
 
 uint16_t channels[16] = {0};
+
+
+void timer_init() {
+    const esp_timer_create_args_t timer_args = {
+        .callback = &timer_callback,
+        .name = "timer_callback"
+    };
+
+    esp_timer_handle_t timer_periodic;
+    ESP_ERROR_CHECK(esp_timer_create(&timer_args, &timer_periodic));
+    ESP_ERROR_CHECK(esp_timer_start_periodic(timer_periodic, INTERVALMS));
+}
+
+static int64_t last_time = 0;
+
+static void timer_callback(void* arg) {
+    int64_t time_since_boot = esp_timer_get_time();
+    int64_t interval = time_since_boot - last_time;
+    
+    // portENTER_CRITICAL_ISR(&spinlock);
+    transmit_yet = interval < 4000 ? 1 : 0;
+    // portEXIT_CRITICAL(&spinlock);
+
+    // transmit_yet = 1;
+    if(!transmit_yet) ESP_LOGI(TAG, "interval is %lld us", interval);
+    last_time = time_since_boot;
+}
 
 
 void uart_init() {
@@ -181,33 +219,7 @@ void right_imu_task() {
 }
 
 
-#define DELAYTIME 4
-// ELRS related task
-//create task that will be executed 3ms regularly
-
-void elrs_task(void * pvParameters) {
-
-/*
- frame = bytearray([
-            0xC8,
-            0x08,
-            0x32,
-            TX_ADDR,# Destination
-            RC_ADDR,       # Origin
-            0x10,
-            0x05,
-            model_num,
-               # Command CRC (placeholder)
-        ])
-        # Calculate command CRC
-        # frame[8] = self.calculate_command_crc(frame[2:8])
-        # Add frame CRC
-        frame.append(self.calculate_command_crc(frame[2:]))
-        frame.append(self.calculate_crc(frame[2:]))
-        self.serial.write(frame)
-*/
-
-    uint8_t packet[PACKET_LENGTH] = {0};
+static void switch_id() {
     uint8_t packetCommand[10] = {
         0xC8,
         0x08,
@@ -222,36 +234,39 @@ void elrs_task(void * pvParameters) {
     packetCommand[8] = get_command_crc8(&packetCommand[2], 6);
     packetCommand[9] = get_crc8(&packetCommand[2], 7);
 
-    packet[0] = 0xC8;
-    // TickType_t lastTick;
-    // const TickType_t delay = pdMS_TO_TICKS(3);
-    // lastTick = xTaskGetTickCount();
-    int first  = 1;
-    while (true)
-    {   
+       if( transmit_yet){
+        for(int i = 0; i < 10; i++){
+            printf(". ");
+            elrs_send_data(UART_NUM, packetCommand, 10);
+            vTaskDelay(4 / configTICK_RATE_HZ);
+            }
+    }
 
-    if(first){
-        
-    for(int i = 0; i < 10; i++){
-    elrs_send_data(UART_NUM, packetCommand, 10);
-    vTaskDelay(DELAYTIME / portTICK_PERIOD_MS);
-    }
-    first = 0;
-    }
+}
+
+void elrs_task(void * pvParameters) {
+    uint8_t packet[PACKET_LENGTH] = {0};
+    packet[0] = 0xC8;
+
+    while (true){   
+    if(transmit_yet){
         create_crsf_channels_packet(channels, packet);
         elrs_send_data(UART_NUM, packet, PACKET_LENGTH);
-        vTaskDelay(DELAYTIME / portTICK_PERIOD_MS); // ojo diganti
-        // vTaskDelayUntil(&lastTick, delay);
+        transmit_yet = 0;
     }
-    
+
+    vTaskDelay(1 / portTICK_PERIOD_MS); // ojo diganti
+    }
 }
 
 void app_main(void) {
     uart_init();
     i2c_init();
+    timer_init();
+    switch_id();
     // switch_init();
 
     // xTaskCreate(left_imu_task, "left_imu", 4096, NULL, 4, NULL);
     // xTaskCreate(right_imu_task, "right_imu", 4096, NULL, 4, NULL);
-    xTaskCreate(elrs_task, "send_payload", 4096, NULL, 5, NULL);
+    xTaskCreate(elrs_task, "send_payload", 4096, NULL, tskIDLE_PRIORITY, NULL);
 }

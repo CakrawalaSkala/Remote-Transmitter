@@ -20,7 +20,9 @@
 		"locale": "c",
 		"ostream": "c",
 		"regex": "c",
-		"xlocale": "c"
+		"xlocale": "c",
+		"span": "c",
+		"type_traits": "c"
 	},
 	"idf.portWin": "COM3",
 	"idf.flashType": "UART"

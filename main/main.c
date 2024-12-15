@@ -177,6 +177,7 @@ void left_imu_task() {
         /*Mapping degree to PWM*/
         channels[THROTTLE] = mapValue(imu_data.processed.x, -30, 30, 0, MAX_CHANNEL_VALUE);
         channels[YAW] = mapValue(imu_data.processed.y, -30, 30, 0, MAX_CHANNEL_VALUE);
+        // printf("-");
 
         // Deadzone
         // if (yaw_pwm > 1450 && yaw_pwm < 1550) {
@@ -213,14 +214,17 @@ void right_imu_task() {
         /*Mapping degree to PWM*/
         channels[ROLL] = mapValue(imu_data.processed.y, -45, 45, 0, MAX_CHANNEL_VALUE);
         channels[PITCH] = mapValue(imu_data.processed.x, -45, 45, MAX_CHANNEL_VALUE, 0);
+        // printf("+");
 
         vTaskDelay(10 / portTICK_PERIOD_MS);
     }
 }
 
 
-static void switch_id() {
-    uint8_t packetCommand[10] = {
+bool first = 1;
+
+void elrs_task(void * pvParameters) {
+uint8_t packetCommand[10] = {
         0xC8,
         0x08,
         0x32,
@@ -234,22 +238,22 @@ static void switch_id() {
     packetCommand[8] = get_command_crc8(&packetCommand[2], 6);
     packetCommand[9] = get_crc8(&packetCommand[2], 7);
 
-       if( transmit_yet){
-        for(int i = 0; i < 10; i++){
-            printf(". ");
-            elrs_send_data(UART_NUM, packetCommand, 10);
-            vTaskDelay(4 / configTICK_RATE_HZ);
-            }
-    }
 
-}
-
-void elrs_task(void * pvParameters) {
     uint8_t packet[PACKET_LENGTH] = {0};
     packet[0] = 0xC8;
 
     while (true){   
     if(transmit_yet){
+
+        if(first){
+            for(int i = 0; i < 10; i++){
+            printf(". ");
+            elrs_send_data(UART_NUM, packetCommand, 10);
+            vTaskDelay(1 / configTICK_RATE_HZ);
+            }
+            first = 0;
+        }
+        printf(". ");
         create_crsf_channels_packet(channels, packet);
         elrs_send_data(UART_NUM, packet, PACKET_LENGTH);
         transmit_yet = 0;
@@ -263,10 +267,10 @@ void app_main(void) {
     uart_init();
     i2c_init();
     timer_init();
-    switch_id();
+    // switch_id();
     // switch_init();
 
-    // xTaskCreate(left_imu_task, "left_imu", 4096, NULL, 4, NULL);
-    // xTaskCreate(right_imu_task, "right_imu", 4096, NULL, 4, NULL);
+    xTaskCreate(left_imu_task, "left_imu", 4096, NULL, 4, NULL);
+    xTaskCreate(right_imu_task, "right_imu", 4096, NULL, 4, NULL);
     xTaskCreate(elrs_task, "send_payload", 4096, NULL, tskIDLE_PRIORITY, NULL);
 }

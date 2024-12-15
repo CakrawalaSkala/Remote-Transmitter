@@ -111,7 +111,7 @@ void create_crsf_channels_packet(uint16_t *channels, uint8_t *packet) {
 }
 
 void elrs_send_data(const int port, const uint8_t *data, size_t len) {
-    printf("send data %.2x \n", data[0]);
+    // printf("send data %.2x \n", data[0]);
     if (uart_write_bytes(port, data, len) != len) {
         ESP_LOGE(TAG, "Send data critical failure.");
     }

@@ -7,3 +7,12 @@ float mapValue(float value, float inputMin, float inputMax, float outputMin, flo
     float outputRange = outputMax - outputMin;
     return ((value - inputMin) * outputRange / inputRange) + outputMin;
 }
+
+void applyDeadzone(float *value, float center, float deadzone) {
+    float upper = center + deadzone;
+    float lower = center - deadzone;
+
+    if (*value < lower) *value += deadzone;
+    else if (*value > upper) *value -= deadzone;
+    else *value = center;
+}

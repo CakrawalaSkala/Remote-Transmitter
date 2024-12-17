@@ -3,8 +3,6 @@
 
 #include "driver/gpio.h"
 #include "driver/i2c.h"
-#include "driver/adc.h"
-#include "esp_adc_cal.h"
 #include "driver/uart.h"
 #include "esp_log.h"
 #include "esp_timer.h"
@@ -17,10 +15,7 @@
 
 #include "esp_log.h"
 
-
-
-static const char* TAG = "Tes";
-
+static const char *TAG = "Tes";
 
 // ELRS UART
 #define UART_NUM UART_NUM_2
@@ -29,15 +24,13 @@ static const char* TAG = "Tes";
 
 //TIMER
 #define INTERVALMS 3 * 1000 // in microseconds
-static void timer_callback(void* arg);
-bool transmit_yet = 0;
+
+static void timer_callback(void *arg);
+bool should_transmit = false;
+static int64_t last_time = 0;
 
 // IMU
-bool left_calibrated = false;
-bool right_calibrated = false;
-
-uint16_t channels[16] = {0};
-
+uint16_t channels[16] = { 0 };
 
 void timer_init() {
     const esp_timer_create_args_t timer_args = {
@@ -50,21 +43,18 @@ void timer_init() {
     ESP_ERROR_CHECK(esp_timer_start_periodic(timer_periodic, INTERVALMS));
 }
 
-static int64_t last_time = 0;
 
-static void timer_callback(void* arg) {
+static void timer_callback(void *arg) {
     int64_t time_since_boot = esp_timer_get_time();
     int64_t interval = time_since_boot - last_time;
-    
+
     // portENTER_CRITICAL_ISR(&spinlock);
-    transmit_yet = interval < 4000 ? 1 : 0;
+    should_transmit = interval < 4000 ? true : false;
     // portEXIT_CRITICAL(&spinlock);
 
-    // transmit_yet = 1;
-    if(!transmit_yet) ESP_LOGI(TAG, "interval is %lld us", interval);
+    if (!should_transmit) ESP_LOGI(TAG, "interval is %lld us", interval);
     last_time = time_since_boot;
 }
-
 
 void uart_init() {
     const uart_config_t uart_config = {
@@ -169,7 +159,6 @@ void left_imu_task() {
     }
     imu_divide_single(&imu_data.offset, 2000);
     printf("Left Gyro Calibration done!!\n");
-    left_calibrated = true;
 
     while (true) {
         imu_read(imu, &imu_data);
@@ -180,13 +169,7 @@ void left_imu_task() {
         // printf("-");
 
         // Deadzone
-        // if (yaw_pwm > 1450 && yaw_pwm < 1550) {
-        //     yaw_pwm = 1500;
-        // } else if (yaw_pwm > 1450) {
-        //     yaw_pwm += 50;
-        // } else if (yaw_pwm < 1550) {
-        //     yaw_pwm -= 50;
-        // }
+        // applyDeadzone(&channels[YAW], 1500, 50);
 
         vTaskDelay(10 / portTICK_PERIOD_MS);
     }
@@ -206,7 +189,6 @@ void right_imu_task() {
     }
     imu_divide_single(&imu_data.offset, 2000);
     printf("Right Gyro Calibration done!!\n");
-    right_calibrated = true;
 
     while (true) {
         imu_read(imu, &imu_data);
@@ -220,46 +202,22 @@ void right_imu_task() {
     }
 }
 
+void elrs_task(void *pvParameters) {
+    uint8_t channel_packet[CHANNEL_PACKET_LENGTH] = { 0 };
+    uint8_t model_packet[MODEL_SWITCH_PACKET_LENGTH] = { 0 };
 
-bool first = 1;
+    while (true) {
+        if (should_transmit) {
+            should_transmit = false;
 
-void elrs_task(void * pvParameters) {
-uint8_t packetCommand[10] = {
-        0xC8,
-        0x08,
-        0x32,
-        DEVICE_ADDRESS_TX_MODULE,
-        DEVICE_ADDRESS_REMOTE_CONTROL,
-        0x10,
-        0x05,
-        0x01,
-    };
+            create_model_switch_packet(1, channel_packet);
+            elrs_send_data(UART_NUM, model_packet, 10);
 
-    packetCommand[8] = get_command_crc8(&packetCommand[2], 6);
-    packetCommand[9] = get_crc8(&packetCommand[2], 7);
-
-
-    uint8_t packet[PACKET_LENGTH] = {0};
-    packet[0] = 0xC8;
-
-    while (true){   
-    if(transmit_yet){
-
-        if(first){
-            for(int i = 0; i < 10; i++){
-            printf(". ");
-            elrs_send_data(UART_NUM, packetCommand, 10);
-            vTaskDelay(1 / configTICK_RATE_HZ);
-            }
-            first = 0;
+            create_crsf_channels_packet(channels, channel_packet);
+            elrs_send_data(UART_NUM, channel_packet, CHANNEL_PACKET_LENGTH);
         }
-        printf(". ");
-        create_crsf_channels_packet(channels, packet);
-        elrs_send_data(UART_NUM, packet, PACKET_LENGTH);
-        transmit_yet = 0;
-    }
 
-    vTaskDelay(1 / portTICK_PERIOD_MS); // ojo diganti
+        vTaskDelay(1 / portTICK_PERIOD_MS); // ojo diganti
     }
 }
 

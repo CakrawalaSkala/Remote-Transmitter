@@ -78,6 +78,7 @@ void uart_init() {
     // UART_SIGNAL_RXD_INV
 }
 
+
 void switch_init() {
     /*Switch Mode Init pin : D5 or GPIO 5 */
     gpio_config_t io_conf1 = {
@@ -158,7 +159,9 @@ void left_imu_task() {
         imu_add(&imu_data.offset, imu_data.gyro);
     }
     imu_divide_single(&imu_data.offset, 2000);
-    printf("Left Gyro Calibration done!!\n");
+    // printf("Left Gyro Calibration done!!\n");
+    ESP_LOGI(TAG, "Left Gyro calibration done!");
+    left_calibrated = true;
 
     while (true) {
         imu_read(imu, &imu_data);
@@ -188,7 +191,10 @@ void right_imu_task() {
         imu_add(&imu_data.offset, imu_data.gyro);
     }
     imu_divide_single(&imu_data.offset, 2000);
-    printf("Right Gyro Calibration done!!\n");
+    ESP_LOGI(TAG, "Right Gyro calibration done!");
+
+    // printf("Right Gyro Calibration done!!\n");
+    right_calibrated = true;
 
     while (true) {
         imu_read(imu, &imu_data);
@@ -221,6 +227,14 @@ void elrs_task(void *pvParameters) {
     }
 }
 
+void command_task(){
+    
+    
+    while(1){
+
+    }
+}
+
 void app_main(void) {
     uart_init();
     i2c_init();
@@ -228,7 +242,8 @@ void app_main(void) {
     // switch_id();
     // switch_init();
 
-    xTaskCreate(left_imu_task, "left_imu", 4096, NULL, 4, NULL);
-    xTaskCreate(right_imu_task, "right_imu", 4096, NULL, 4, NULL);
-    xTaskCreate(elrs_task, "send_payload", 4096, NULL, tskIDLE_PRIORITY, NULL);
+    xTaskCreatePinnedToCore(left_imu_task, "left_imu", 4096, NULL, 4, NULL,0);
+    xTaskCreatePinnedToCore(right_imu_task, "right_imu", 4096, NULL, 4, NULL,0);
+    xTaskCreatePinnedToCore(elrs_task, "send_payload", 4096, NULL, tskIDLE_PRIORITY, NULL, 1);
+
 }

@@ -92,8 +92,8 @@ void create_crsf_channels_packet(uint16_t *channels, uint8_t *packet) {
 }
 
 // Model switch
-void create_model_switch_packet(uint8_t id, uint8_t *packet) {
-    if (current_id == id) return;
+bool create_model_switch_packet(uint8_t id, uint8_t *packet) {
+    if (current_id == id) return 0;
     current_id = id;
 
     packet[0] = DEVICE_ADDRESS_FLIGHT_CONTROLLER;
@@ -106,4 +106,5 @@ void create_model_switch_packet(uint8_t id, uint8_t *packet) {
     packet[7] = id;
     packet[8] = get_crc8(&packet[2], 6, CRSF_CRC_COMMAND_POLY);
     packet[9] = get_crc8(&packet[2], 7, CRSF_CRC_POLY);
+    return 1;
 }

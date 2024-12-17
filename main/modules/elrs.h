@@ -7,6 +7,15 @@
 #define CHANNEL_PACKET_LENGTH 26
 #define MODEL_SWITCH_PACKET_LENGTH 10
 
+
+typedef enum {
+    GPIO_MEKANISME = GPIO_NUM_0,
+    GPIO_SW_KAMERA = GPIO_NUM_1,
+    GPIO_ARMING = GPIO_NUM_2,
+    GPIO_KALIBRASI = GPIO_NUM_3,
+    GPIO_180 = GPIO_NUM_4   
+} command_gpio_t;
+
 typedef enum {
     DEVICE_ADDRESS_BROADCAST = 0x00,
     DEVICE_ADDRESS_FLIGHT_CONTROLLER = 0xC8,
@@ -56,8 +65,11 @@ typedef enum {
     AUX12 = 15
 } crsf_channels_type;
 
+
+
+
 uint8_t get_crc8(uint8_t *buf, size_t size, uint8_t poly);
 void elrs_send_data(const int port, const uint8_t *data, size_t len);
 
 void create_crsf_channels_packet(uint16_t *channels, uint8_t *packet);
-void create_model_switch_packet(uint8_t id, uint8_t *packet);
+bool create_model_switch_packet(uint8_t id, uint8_t *packet);

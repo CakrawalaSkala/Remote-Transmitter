@@ -161,7 +161,6 @@ void left_imu_task() {
     imu_divide_single(&imu_data.offset, 2000);
     // printf("Left Gyro Calibration done!!\n");
     ESP_LOGI(TAG, "Left Gyro calibration done!");
-    left_calibrated = true;
 
     while (true) {
         imu_read(imu, &imu_data);
@@ -194,7 +193,6 @@ void right_imu_task() {
     ESP_LOGI(TAG, "Right Gyro calibration done!");
 
     // printf("Right Gyro Calibration done!!\n");
-    right_calibrated = true;
 
     while (true) {
         imu_read(imu, &imu_data);
@@ -215,23 +213,44 @@ void elrs_task(void *pvParameters) {
     while (true) {
         if (should_transmit) {
             should_transmit = false;
+            
+            if(create_model_switch_packet(1, channel_packet)){
+                elrs_send_data(UART_NUM, model_packet, 10);
+            }else{
+                create_crsf_channels_packet(channels, channel_packet);
+                printf("r%dp%dt%dy%d\n", channels[ROLL], channels[PITCH], channels[THROTTLE], channels[YAW]);
+                elrs_send_data(UART_NUM, channel_packet, CHANNEL_PACKET_LENGTH);
+            }
+            
 
-            create_model_switch_packet(1, channel_packet);
-            elrs_send_data(UART_NUM, model_packet, 10);
-
-            create_crsf_channels_packet(channels, channel_packet);
-            elrs_send_data(UART_NUM, channel_packet, CHANNEL_PACKET_LENGTH);
-        }
-
+        } 
+        
         vTaskDelay(1 / portTICK_PERIOD_MS); // ojo diganti
     }
 }
 
-void command_task(){
+
+
+
+void gpio_task(){
     
     
     while(1){
+        if(gpio_get_level(GPIO_180)){
+            
+        }
+        if(gpio_get_level(GPIO_ARMING)){
 
+        }
+        if(gpio_get_level(GPIO_KALIBRASI)){
+            
+        }
+        if(gpio_get_level(GPIO_SW_KAMERA)){
+            
+        }
+        if(gpio_get_level(GPIO_MEKANISME)){
+            
+        }
     }
 }
 
@@ -245,5 +264,5 @@ void app_main(void) {
     xTaskCreatePinnedToCore(left_imu_task, "left_imu", 4096, NULL, 4, NULL,0);
     xTaskCreatePinnedToCore(right_imu_task, "right_imu", 4096, NULL, 4, NULL,0);
     xTaskCreatePinnedToCore(elrs_task, "send_payload", 4096, NULL, tskIDLE_PRIORITY, NULL, 1);
-
+    xTaskCreatePinnedToCore(gpio_task, "GPIO_Handler", 4096, NULL, 1, NULL, 1);
 }
